@@ -11,9 +11,9 @@
   --verde:#00d06c; --gialla:#f5c518; --rossa:#e1231e; --nera:#f2f2f0;
   --carta:#ece5d8; --carta-txt:#241f1a;
   --out:cubic-bezier(.23,1,.32,1); --inout:cubic-bezier(.77,0,.175,1);
-  --mono:"JetBrains Mono",ui-monospace,monospace;
-  --cond:"Barlow Condensed",system-ui,sans-serif;
-  --body:"Barlow",system-ui,sans-serif;
+  --mono:"JetBrains Mono","DejaVu Sans Mono","Roboto Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --cond:"Barlow Condensed","Roboto Condensed","Arial Narrow",Roboto,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --body:"Barlow",Roboto,system-ui,-apple-system,"Segoe UI","Helvetica Neue",Arial,sans-serif;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;background:var(--asfalto);color:var(--testo);font-family:var(--body);overscroll-behavior-y:none}
@@ -33,7 +33,18 @@ input{font:inherit}
 .post:active{transform:scale(.985)}
 .post h3{font-family:var(--cond);font-size:22px;letter-spacing:.06em;text-transform:uppercase;margin:10px 0 6px}
 .post p{margin:0;font-size:14px;line-height:1.5;color:var(--testo-2)}
-.post .k{font-size:26px}
+.post .k{font-size:26px;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
+.conn{margin-top:26px;background:var(--muretto);border:1px solid var(--linea);border-radius:16px;padding:18px 20px}
+.conn-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:10px}
+.conn p{margin:0 0 12px;font-size:14px;line-height:1.5;color:var(--testo-2)}
+.conn-btn{display:inline-block;margin:0 8px 8px 0;padding:12px 16px;border-radius:11px;border:1px solid var(--linea);
+  font-family:var(--cond);font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--testo-2);
+  transition:border-color 160ms ease,color 160ms ease}
+.conn-btn.primo{border-color:var(--box);color:var(--box)}
+.conn input{width:100%;background:var(--asfalto);border:1px solid var(--linea);border-radius:11px;padding:13px 14px;
+  color:var(--testo);font-family:var(--mono);font-size:16px;outline:none;margin-bottom:8px}
+.conn input:focus{border-color:var(--box)}
+.codice{font-family:var(--mono);font-weight:800;font-size:22px;color:var(--box);letter-spacing:.06em;word-break:break-all}
 @media(hover:hover){.post:hover{border-color:var(--box)}}
 
 /* ══ telefono ══ */
@@ -69,7 +80,7 @@ main{padding:16px 16px 8px;max-width:520px;margin:0 auto}
 .griglia{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
 .drink{position:relative;background:var(--muretto);border:1px solid var(--linea);border-radius:12px;padding:12px 10px 11px;text-align:left;transition:transform 130ms var(--out),border-color 180ms ease,background 180ms ease}
 .drink:active{transform:scale(.96);background:var(--muretto-alto)}
-.drink .ico{font-size:21px;line-height:1}
+.drink .ico{font-size:21px;line-height:1;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
 .drink .n{font-family:var(--cond);font-weight:600;font-size:15px;letter-spacing:.04em;text-transform:uppercase;margin-top:8px;line-height:1.05}
 .drink .s{font-family:var(--mono);font-size:10px;color:var(--testo-3);margin-top:4px}
 .drink .u{position:absolute;top:9px;right:9px;font-family:var(--mono);font-size:10px;color:var(--testo-3)}
@@ -253,8 +264,10 @@ nav button.on::after{width:38px}
       <p>Schermo grande: torre di classifica live, mappa GPS della griglia e feed dei pit stop. Sul PC.</p>
     </button>
   </div>
-  <p class="nota">Stessa pagina, due postazioni. Classifica, catalogo bevande e posizioni sono condivisi
-  fra tutti quelli che aprono il link.</p>
+  <div class="conn">
+    <div class="conn-top"><span class="eyebrow">Collegamento dati</span><span class="eyebrow" id="connStato">—</span></div>
+    <div id="connCorpo"></div>
+  </div>
 </div>
 
 <div id="fisso" style="display:none"><div id="app"></div></div>
@@ -263,6 +276,7 @@ nav button.on::after{width:38px}
   <div class="mw-top">
     <div><div class="marchio">BOX <em>BOX</em> BOX</div><div class="sotto">Muretto · Varano</div></div>
     <div class="mw-stat">
+      <div><span class="eyebrow">Codice gara</span><b id="mwCodice" style="font-size:17px;color:var(--box)">—</b></div>
       <div><span class="eyebrow">In griglia</span><b id="mwN">0</b></div>
       <div><span class="eyebrow">Unità totali</span><b id="mwU">0</b></div>
       <div><span class="eyebrow">Sotto limite</span><b id="mwOk" style="color:var(--verde)">0</b></div>
@@ -306,7 +320,7 @@ nav button.on::after{width:38px}
 <script>
 /* ═══ BOX BOX BOX — Varano ═══ */
 const K_GRIGLIA="varano:griglia:v3", K_CATALOGO="varano:catalogo:v3",
-      K_LOCALE="varano:pilota:v3", K_MODO="varano:modo:v3";
+      K_LOCALE="varano:pilota:v3", K_MODO="varano:modo:v3", K_SESSIONE="varano:sessione:v3";
 const DECAD=0.15, LIMITE=0.5, VARANO={lat:44.6836,lng:10.0217};
 const grammiDi=(ml,abv)=>ml*(abv/100)*0.789;
 
@@ -328,6 +342,7 @@ const col=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim
 
 /* ── sfide a sorpresa ── */
 const K_SFIDA="varano:sfida:v3";
+CAMPO[K_GRIGLIA]="griglia"; CAMPO[K_CATALOGO]="catalogo"; CAMPO[K_SFIDA]="sfida";
 const TIPI={
   veloce:{nome:"Giro veloce",c:"--box",durata:5*60e3,premio:10,
     des:"Finestra da cinque minuti: il tuo prossimo pit stop vale punteggio doppio. Uno solo a testa, e conta solo se sei sotto 0,50."},
@@ -437,14 +452,100 @@ function suona(che){
 let io=null, griglia={}, catalogo=[...CATALOGO_BASE], modo=null, tab="box", nTacche=0, modifica=false, gpsId=null;
 
 let diagErr=null, diagLetto=0, diagSync=0, diagScritto=0;
+
+/* ═══ LIVELLO DATI ═══
+   Tre canali, in ordine di preferenza:
+     "rete"      → sessione su server pubblico, condivisa fra tutti i dispositivi
+     "anteprima" → archivio dell'anteprima della chat (solo lì dentro)
+     "locale"    → questo dispositivo e basta, senza sincronia
+   La memoria del dispositivo (pilota, postazione) sta sempre in locale.        */
+let backend="locale";
+const NET={srv:"jsonblob", id:null};
+let doc={griglia:{},catalogo:null,sfida:null};
+const CAMPO={};
+
+/* memoria locale, con riserva in RAM se il browser la blocca (file://) */
+const RAM={};
+function locSet(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)) }catch(e){ RAM[k]=v } }
+function locGet(k){ try{ const r=localStorage.getItem(k); return r?JSON.parse(r):(k in RAM?RAM[k]:null) }catch(e){ return k in RAM?RAM[k]:null } }
+function locDel(k){ try{ localStorage.removeItem(k) }catch(e){} delete RAM[k]; }
+
+const SERVER={
+  jsonblob:{
+    nome:"JsonBlob",
+    crea:async d=>{
+      const r=await fetch("https://jsonblob.com/api/jsonBlob",{method:"POST",
+        headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(d)});
+      if(!r.ok) throw new Error("HTTP "+r.status);
+      const loc=r.headers.get("Location")||r.headers.get("X-jsonblob")||"";
+      const id=(loc.split("/").pop()||"").trim();
+      if(!id) throw new Error("il server non ha restituito l'identificativo (header Location nascosto)");
+      return id;
+    },
+    url:id=>"https://jsonblob.com/api/jsonBlob/"+id,
+  },
+  kvdb:{
+    nome:"kvdb.io",
+    crea:async d=>{
+      const b=await fetch("https://kvdb.io/",{method:"POST",body:""});
+      if(!b.ok) throw new Error("HTTP "+b.status);
+      const bucket=(await b.text()).trim();
+      await fetch("https://kvdb.io/"+bucket+"/gara",{method:"PUT",body:JSON.stringify(d)});
+      return bucket;
+    },
+    url:id=>"https://kvdb.io/"+id+"/gara",
+  },
+};
+const urlGara=()=>SERVER[NET.srv].url(NET.id);
+
+async function tira(){
+  if(backend!=="rete"||!NET.id) return false;
+  try{
+    const r=await fetch(urlGara(),{cache:"no-store",headers:{"Accept":"application/json"}});
+    if(!r.ok) throw new Error("HTTP "+r.status);
+    const d=await r.json();
+    if(d&&typeof d==="object"){
+      doc={griglia:d.griglia||{},catalogo:d.catalogo||null,sfida:d.sfida||null};
+      if(io){ const m=doc.griglia[io.id]; if(!m||(m.updated||0)<(io.updated||0)) doc.griglia[io.id]=io; }
+      diagSync=Date.now(); diagErr=null; return true;
+    }
+    throw new Error("risposta non valida");
+  }catch(e){ diagErr="rete: "+(e&&e.message||e); return false }
+}
+let spinta=null, spintaAttesa=false;
+function spingi(){
+  spintaAttesa=true;
+  if(spinta) return true;
+  spinta=setTimeout(async()=>{
+    spinta=null; spintaAttesa=false;
+    try{
+      const r=await fetch(urlGara(),{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(doc)});
+      if(!r.ok) throw new Error("HTTP "+r.status);
+      diagScritto=Date.now(); diagErr=null;
+    }catch(e){ diagErr="invio: "+(e&&e.message||e) }
+  },350);
+  return true;
+}
+
 const leggi=async(k,c)=>{
-  try{ const r=await window.storage.get(k,c); if(c) diagSync=Date.now(); return r?JSON.parse(r.value):null }
-  catch(e){ const m=String(e&&e.message||e); if(!/not found|no such|missing/i.test(m)) diagErr="lettura: "+m; return null }
+  if(!c) return locGet(k);
+  if(backend==="rete") return doc[CAMPO[k]]??null;
+  if(backend==="anteprima"){
+    try{ const r=await window.storage.get(k,true); diagSync=Date.now(); return r?JSON.parse(r.value):null }
+    catch(e){ const m=String(e&&e.message||e); if(!/not found|no such|missing/i.test(m)) diagErr="lettura: "+m; return null }
+  }
+  return locGet("c:"+k);
 };
 const scrivi=async(k,v,c)=>{
-  try{ await window.storage.set(k,JSON.stringify(v),c); if(c){diagScritto=Date.now(); diagErr=null;} return true }
-  catch(e){ diagErr="scrittura: "+String(e&&e.message||e); return false }
+  if(!c){ locSet(k,v); return true }
+  if(backend==="rete"){ doc[CAMPO[k]]=v; return spingi() }
+  if(backend==="anteprima"){
+    try{ await window.storage.set(k,JSON.stringify(v),true); diagScritto=Date.now(); diagErr=null; return true }
+    catch(e){ diagErr="scrittura: "+String(e&&e.message||e); return false }
+  }
+  locSet("c:"+k,v); return true;
 };
+const cancella=async(k)=>{ locDel(k); try{ await window.storage.delete(k,false) }catch(e){} };
 
 async function salva(p){
   io=p; griglia[p.id]=p; scrivi(K_LOCALE,p,false);
@@ -453,6 +554,7 @@ async function salva(p){
 async function salvaCatalogo(c){ catalogo=c; await scrivi(K_CATALOGO,c,true); }
 
 async function sincronizza(){
+  if(backend==="rete") await tira();
   const g=await leggi(K_GRIGLIA,true);
   diagLetto=g?Object.keys(g).length:0;
   {
@@ -509,10 +611,105 @@ const oraDi=t=>new Date(t).toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-
 const esc=s=>String(s).replace(/[<>&]/g,m=>({"<":"&lt;",">":"&gt;","&":"&amp;"}[m]));
 const classifica=()=>Object.values(griglia).map(p=>({p,s:stato(p)})).sort((a,b)=>b.s.punti-a.s.punti||a.s.bac-b.s.bac);
 
+/* ═══ CONNESSIONE ═══ */
+function statoConn(){
+  const e=document.getElementById("connStato"); if(!e) return;
+  if(backend==="rete") e.innerHTML=`<span style="color:var(--verde)">sessione ${esc(NET.id.slice(0,10))}</span>`;
+  else if(backend==="anteprima") e.innerHTML=`<span style="color:var(--gialla)">solo anteprima chat</span>`;
+  else e.innerHTML=`<span style="color:var(--rossa)">solo questo dispositivo</span>`;
+}
+function pannelloConn(vista){
+  const c=document.getElementById("connCorpo"); if(!c) return;
+  statoConn();
+  if(vista==="entra"){
+    c.innerHTML=`<p>Chiedi il codice a chi ha creato la sessione e incollalo qui.</p>
+      <input id="cnCod" placeholder="codice gara" autocomplete="off" autocapitalize="off" spellcheck="false">
+      <button class="conn-btn primo" id="cnOk">Entra</button>
+      <button class="conn-btn" id="cnBack">Indietro</button>`;
+    document.getElementById("cnOk").addEventListener("click",()=>unisci(document.getElementById("cnCod").value.trim()));
+    document.getElementById("cnBack").addEventListener("click",()=>pannelloConn());
+    return;
+  }
+  if(backend==="rete"){
+    c.innerHTML=`<p>Sessione attiva su ${SERVER[NET.srv].nome}. Passa questo codice a tutti i piloti:</p>
+      <div class="codice">${esc(NET.srv)}:${esc(NET.id)}</div>
+      <div style="margin-top:12px">
+        <button class="conn-btn" id="cnCopia">Copia codice</button>
+        <button class="conn-btn" id="cnProva">Prova connessione</button>
+        <button class="conn-btn" id="cnEsci">Scollega</button></div>`;
+    document.getElementById("cnCopia").addEventListener("click",async()=>{
+      const t=NET.srv+":"+NET.id;
+      try{ await navigator.clipboard.writeText(t); alert("Codice copiato.") }catch(e){ prompt("Copia il codice:",t) }
+    });
+    document.getElementById("cnProva").addEventListener("click",async()=>{
+      const ok=await tira();
+      alert(ok?`Connessione ok.\nPiloti nella sessione: ${Object.keys(doc.griglia||{}).length}`:"Non risponde:\n"+diagErr);
+    });
+    document.getElementById("cnEsci").addEventListener("click",async()=>{
+      await cancella(K_SESSIONE); NET.id=null; backend=window.storage?"anteprima":"locale"; pannelloConn();
+    });
+    return;
+  }
+  c.innerHTML=`<p>Per avere classifica, sfide e posizioni in tempo reale su tutti i telefoni serve una
+    sessione condivisa: la crea uno solo, gli altri entrano col codice. Senza, l'app funziona lo stesso
+    ma i dati restano su questo dispositivo.</p>
+    <button class="conn-btn primo" id="cnCrea">Crea sessione</button>
+    <button class="conn-btn" id="cnEntra">Entra con un codice</button>
+    <button class="conn-btn" id="cnSolo">Continua senza</button>`;
+  document.getElementById("cnCrea").addEventListener("click",crea);
+  document.getElementById("cnEntra").addEventListener("click",()=>pannelloConn("entra"));
+  document.getElementById("cnSolo").addEventListener("click",()=>{document.getElementById("connCorpo").innerHTML=`<p>Va bene: nessuna sincronia. Scegli la postazione qui sopra.</p>`});
+}
+
+async function crea(){
+  const c=document.getElementById("connCorpo");
+  c.innerHTML=`<p>Creo la sessione…</p>`;
+  const ordine=["jsonblob","kvdb"];
+  let ultimo="";
+  for(const srv of ordine){
+    try{
+      const id=await SERVER[srv].crea({griglia:{},catalogo:CATALOGO_BASE,sfida:null});
+      NET.srv=srv; NET.id=id; backend="rete"; doc={griglia:{},catalogo:CATALOGO_BASE,sfida:null};
+      locSet(K_SESSIONE,{srv,id});
+      pannelloConn(); avviaRete();
+      return;
+    }catch(e){ ultimo=SERVER[srv].nome+": "+(e&&e.message||e) }
+  }
+  c.innerHTML=`<p style="color:var(--rossa)">Nessun server ha risposto. ${esc(ultimo)}</p>
+    <p>Può succedere se la pagina gira dentro l'anteprima della chat, che blocca le chiamate esterne.
+    Scarica il file e aprilo da un indirizzo https.</p>
+    <button class="conn-btn" id="cnBack2">Indietro</button>`;
+  document.getElementById("cnBack2").addEventListener("click",()=>pannelloConn());
+}
+
+async function unisci(codice){
+  const c=document.getElementById("connCorpo");
+  if(!codice) return;
+  let srv="jsonblob", id=codice;
+  if(codice.includes(":")){ const [a,b]=codice.split(":"); if(SERVER[a]){srv=a;id=b} }
+  if(!SERVER[srv]) srv="jsonblob";
+  c.innerHTML=`<p>Mi collego…</p>`;
+  NET.srv=srv; NET.id=id.trim(); backend="rete";
+  const ok=await tira();
+  if(ok){ locSet(K_SESSIONE,{srv:NET.srv,id:NET.id}); pannelloConn(); avviaRete(); }
+  else{
+    backend=window.storage?"anteprima":"locale"; NET.id=null;
+    c.innerHTML=`<p style="color:var(--rossa)">Codice non valido o server irraggiungibile.<br>${esc(diagErr||"")}</p>
+      <button class="conn-btn" id="cnBack3">Riprova</button>`;
+    document.getElementById("cnBack3").addEventListener("click",()=>pannelloConn("entra"));
+  }
+}
+
+let retePoll=null;
+function avviaRete(){
+  clearInterval(retePoll);
+  retePoll=setInterval(async()=>{ if(backend==="rete"&&modo){ await tira(); if(modo==="muretto") disegnaMuretto(); } },3000);
+}
+
 /* ── postazione ── */
 document.querySelectorAll(".post").forEach(b=>b.addEventListener("click",()=>entra(b.dataset.m)));
 document.getElementById("mwEsci").addEventListener("click",async()=>{
-  try{await window.storage.delete(K_MODO,false)}catch(e){} location.reload();
+  await cancella(K_MODO); location.reload();
 });
 async function entra(m){
   modo=m; scrivi(K_MODO,m,false); sbloccaAudio();
@@ -773,7 +970,7 @@ function htmlRegole(){
 }
 async function cambiaPilota(){
   spegniGps();
-  try{await window.storage.delete(K_LOCALE,false)}catch(e){}
+  await cancella(K_LOCALE);
   io=null; vistaIscrizione();
 }
 
@@ -898,12 +1095,14 @@ function avviaMuretto(){
 
 function disegnaMuretto(){
   const righe=classifica();
+  const mc=document.getElementById("mwCodice");
+  if(mc) mc.textContent = backend==="rete" ? NET.srv+":"+NET.id : (backend==="anteprima"?"anteprima":"locale");
   const dg=document.getElementById("mwDiag");
   if(dg){
     const conGps=Object.values(griglia).filter(p=>p.gps).length;
     dg.innerHTML = diagErr
-      ? `<span style="color:var(--rossa)">ARCHIVIO KO · ${esc(diagErr).slice(0,60)}</span>`
-      : `archivio ok · ${diagLetto} record · ${conGps} con gps · sync ${diagSync?oraDi(diagSync):"—"}`;
+      ? `<span style="color:var(--rossa)">${esc(diagErr).slice(0,70)}</span>`
+      : `${backend} · ${diagLetto} record · ${conGps} con gps · sync ${diagSync?oraDi(diagSync):"—"}`;
   }
   document.getElementById("mwN").textContent=righe.length;
   document.getElementById("mwU").textContent=righe.reduce((a,r)=>a+r.s.alc,0);
@@ -1240,6 +1439,12 @@ function aggiornaConta(){const e=document.getElementById("nPiloti");if(e)e.textC
 
 /* ── avvio ── */
 (async function(){
+  const ses=locGet(K_SESSIONE);
+  if(ses&&ses.id&&SERVER[ses.srv]){ NET.srv=ses.srv; NET.id=ses.id; backend="rete"; }
+  else if(typeof window.storage!=="undefined"&&window.storage) backend="anteprima";
+  else backend="locale";
+  if(backend==="rete"){ await tira(); avviaRete(); }
+  pannelloConn();
   const c=await leggi(K_CATALOGO,true);
   if(c&&c.length) catalogo=c; else scrivi(K_CATALOGO,CATALOGO_BASE,true);
   const m=await leggi(K_MODO,false);
