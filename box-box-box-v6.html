@@ -1,0 +1,2823 @@
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --asfalto:#12171a; --muretto:#1a2126; --muretto-alto:#222c32; --linea:#2b363d;
+  --testo:#e8eef0; --testo-2:#8fa0a8; --testo-3:#5f7078;
+  --box:#ff7a00; --acqua:#3aa9ff;
+  --verde:#00d06c; --gialla:#f5c518; --rossa:#e1231e; --nera:#f2f2f0;
+  --carta:#ece5d8; --carta-txt:#241f1a;
+  --out:cubic-bezier(.23,1,.32,1); --inout:cubic-bezier(.77,0,.175,1);
+  --mono:"JetBrains Mono","DejaVu Sans Mono","Roboto Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --cond:"Barlow Condensed","Roboto Condensed","Arial Narrow",Roboto,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --body:"Barlow",Roboto,system-ui,-apple-system,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--asfalto);color:var(--testo);font-family:var(--body);overscroll-behavior-y:none}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+input{font:inherit}
+.eyebrow{font-family:var(--cond);font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--testo-3)}
+
+/* ══ scelta postazione ══ */
+#scelta{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:32px 22px;max-width:760px;margin:0 auto}
+.marchio{font-family:var(--cond);font-weight:700;font-size:20px;letter-spacing:.02em;line-height:1}
+.marchio em{font-style:normal;color:var(--box)}
+.sotto{font-family:var(--cond);font-size:10px;letter-spacing:.22em;color:var(--testo-3);margin-top:2px}
+#scelta .marchio{font-size:34px}
+.postazioni{display:grid;gap:12px;margin-top:34px}
+@media(min-width:700px){.postazioni{grid-template-columns:1fr 1fr}}
+.post{background:var(--muretto);border:1px solid var(--linea);border-radius:16px;padding:22px;text-align:left;transition:transform 140ms var(--out),border-color 180ms ease}
+.post:active{transform:scale(.985)}
+.post h3{font-family:var(--cond);font-size:22px;letter-spacing:.06em;text-transform:uppercase;margin:10px 0 6px}
+.post p{margin:0;font-size:14px;line-height:1.5;color:var(--testo-2)}
+.post .k{font-size:26px;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
+.conn{margin-top:26px;background:var(--muretto);border:1px solid var(--linea);border-radius:16px;padding:18px 20px}
+.conn-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:10px}
+.conn p{margin:0 0 12px;font-size:14px;line-height:1.5;color:var(--testo-2)}
+.conn-btn{display:inline-block;margin:0 8px 8px 0;padding:12px 16px;border-radius:11px;border:1px solid var(--linea);
+  font-family:var(--cond);font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--testo-2);
+  transition:border-color 160ms ease,color 160ms ease}
+.conn-btn.primo{border-color:var(--box);color:var(--box)}
+.conn input{width:100%;background:var(--asfalto);border:1px solid var(--linea);border-radius:11px;padding:13px 14px;
+  color:var(--testo);font-family:var(--mono);font-size:16px;outline:none;margin-bottom:8px}
+.conn input:focus{border-color:var(--box)}
+.codice{font-family:var(--mono);font-weight:800;font-size:22px;color:var(--box);letter-spacing:.06em;word-break:break-all}
+@media(hover:hover){.post:hover{border-color:var(--box)}}
+
+/* ══ telefono ══ */
+#fisso{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+header{position:sticky;top:0;z-index:20;background:var(--muretto);border-bottom:1px solid var(--linea);padding-top:env(safe-area-inset-top)}
+#banda{height:3px;background:var(--verde);transition:background 320ms var(--inout)}
+.testata{display:flex;align-items:center;justify-content:space-between;padding:10px 16px}
+.conta{text-align:right;line-height:1.1}
+.conta b{font-family:var(--mono);font-weight:800;font-size:17px}
+main{padding:16px 16px 8px;max-width:520px;margin:0 auto}
+.scheda{background:var(--muretto);border:1px solid var(--linea);border-radius:14px}
+.hero{padding:18px}
+.hero-riga{display:flex;align-items:flex-end;gap:14px}
+#bac{font-family:var(--mono);font-weight:800;font-size:58px;line-height:.86;letter-spacing:-.03em;transition:color 320ms var(--inout)}
+.hero-lato{flex:1;padding-bottom:6px}
+.hero-lato .v{font-family:var(--mono);font-weight:700;font-size:19px;line-height:1.1}
+.gauge{position:relative;height:8px;background:var(--asfalto);border-radius:99px;margin-top:16px;overflow:hidden}
+#gaugeFill{position:absolute;inset:0 auto 0 0;width:0;background:var(--verde);border-radius:99px;transition:width 420ms var(--inout),background 320ms var(--inout)}
+.limite{position:absolute;top:-4px;bottom:-4px;left:50%;width:2px;background:var(--testo);opacity:.55;border-radius:2px}
+.gauge-lab{display:flex;justify-content:space-between;margin-top:6px}
+.stato-riga{display:flex;align-items:center;gap:8px;padding-top:12px;margin-top:12px;border-top:1px solid var(--linea)}
+.pallino{width:9px;height:9px;border-radius:2px;background:var(--verde);flex:none;transition:background 320ms var(--inout)}
+#statoTesto{font-family:var(--cond);font-size:13px;letter-spacing:.1em;text-transform:uppercase;font-weight:600}
+.radio{margin-top:12px;padding:14px 16px;border-left:3px solid var(--box);border-radius:0 14px 14px 0}
+#radioTesto{font-size:15px;line-height:1.45;margin-top:5px}
+.sezione{margin-top:26px}
+.sez-top{display:flex;align-items:center;justify-content:space-between}
+.mini{font-family:var(--cond);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--testo-3);padding:6px 11px;border:1px solid var(--linea);border-radius:99px;transition:color 180ms ease,border-color 180ms ease}
+.mini.on{color:var(--box);border-color:var(--box)}
+.griglia{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.drink{position:relative;background:var(--muretto);border:1px solid var(--linea);border-radius:12px;padding:12px 10px 11px;text-align:left;transition:transform 130ms var(--out),border-color 180ms ease,background 180ms ease}
+.drink:active{transform:scale(.96);background:var(--muretto-alto)}
+.drink .ico{font-size:21px;line-height:1;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
+.drink .n{font-family:var(--cond);font-weight:600;font-size:15px;letter-spacing:.04em;text-transform:uppercase;margin-top:8px;line-height:1.05}
+.drink .s{font-family:var(--mono);font-size:10px;color:var(--testo-3);margin-top:4px}
+.drink .u{position:absolute;top:9px;right:9px;font-family:var(--mono);font-size:10px;color:var(--testo-3)}
+.drink.lampo{border-color:var(--box)}
+.drink.nuova{border-style:dashed;color:var(--testo-3);display:flex;align-items:center;justify-content:center;min-height:88px;font-family:var(--cond);letter-spacing:.1em;text-transform:uppercase;font-size:13px}
+body.modifica .drink[data-b]{border-color:var(--box)}
+#acquaBtn{width:100%;margin-top:8px;padding:15px;border-radius:12px;background:var(--muretto);border:1px solid rgba(58,169,255,.35);color:var(--acqua);font-family:var(--cond);font-weight:600;font-size:14px;letter-spacing:.14em;text-transform:uppercase;transition:transform 130ms var(--out)}
+#acquaBtn:active{transform:scale(.98)}
+#annullaBtn{display:none;width:100%;margin-top:8px;padding:12px;border-radius:12px;border:1px solid var(--linea);font-family:var(--cond);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--testo-3)}
+.nastro-wrap{margin-top:10px;background:var(--muretto);border:1px solid var(--linea);border-radius:12px;padding:14px 14px 10px}
+.nastro{position:relative;height:56px}
+.nastro .base{position:absolute;left:0;right:0;top:28px;height:1px;background:var(--linea)}
+.tacca{position:absolute;top:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;transform:translateX(-50%)}
+.tacca i{display:block;width:2px;height:22px;background:var(--box);border-radius:2px;animation:cresci 260ms var(--out) both}
+.tacca.h2o i{background:var(--acqua)}
+.tacca b{font-family:var(--mono);font-size:9px;font-weight:400;color:var(--testo-3);margin-top:6px;white-space:nowrap}
+@keyframes cresci{from{transform:scaleY(.2);opacity:0}to{transform:scaleY(1);opacity:1}}
+.testina{position:absolute;top:2px;bottom:2px;width:1px;background:var(--testo);opacity:.35}
+.gps{margin-top:12px;padding:14px 16px;display:flex;align-items:center;gap:14px}
+.gps .txt{flex:1;min-width:0}
+#gpsStato{font-size:13px;color:var(--testo-2);margin-top:3px;line-height:1.35}
+.switch{width:50px;height:29px;border-radius:99px;background:var(--asfalto);border:1px solid var(--linea);position:relative;flex:none;transition:background 200ms ease,border-color 200ms ease}
+.switch i{position:absolute;top:3px;left:3px;width:21px;height:21px;border-radius:99px;background:var(--testo-3);transition:transform 220ms var(--out),background 200ms ease}
+.switch.on{background:rgba(0,208,108,.18);border-color:var(--verde)}
+.switch.on i{transform:translateX(21px);background:var(--verde)}
+.riga{display:flex;align-items:stretch;border-bottom:1px solid var(--linea);background:var(--muretto)}
+.riga:first-child{border-radius:14px 14px 0 0}
+.riga:last-child{border-bottom:none;border-radius:0 0 14px 14px}
+.riga.io{background:var(--muretto-alto)}
+.riga .flag{width:4px;flex:none}
+.riga .pos{width:34px;flex:none;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:700;font-size:14px;color:var(--testo-3)}
+.riga .mid{flex:1;min-width:0;padding:12px 8px 12px 2px}
+.riga .nome{font-family:var(--cond);font-weight:600;font-size:16px;letter-spacing:.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.riga.io .nome{color:var(--box)}
+.riga .dett{font-family:var(--mono);font-size:11px;color:var(--testo-3);margin-top:3px}
+.riga .punti{width:78px;flex:none;text-align:right;padding:12px 14px 12px 0}
+.riga .punti b{font-family:var(--mono);font-weight:800;font-size:19px;line-height:1}
+.riga .punti span{display:block;font-family:var(--mono);font-size:11px;color:var(--testo-3);margin-top:2px}
+.tag{display:inline-block;font-family:var(--cond);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:1px 5px;border-radius:4px;margin-left:6px;background:rgba(0,208,108,.14);color:var(--verde)}
+.vuoto{text-align:center;padding:46px 20px;color:var(--testo-3);font-size:14px;line-height:1.5}
+.vuoto b{display:block;font-family:var(--cond);font-size:17px;letter-spacing:.08em;text-transform:uppercase;color:var(--testo-2);margin-bottom:6px}
+.foglio{background:var(--carta);color:var(--carta-txt);border-radius:14px;padding:22px 20px 24px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.foglio h2{font-family:var(--cond);font-size:12px;letter-spacing:.2em;text-transform:uppercase;margin:0 0 2px;color:#8a7f6d}
+.foglio h1{font-family:var(--cond);font-size:26px;letter-spacing:.02em;text-transform:uppercase;margin:0 0 16px;line-height:1}
+.foglio .art{font-family:var(--cond);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#8a7f6d;margin:22px 0 6px;border-bottom:1px solid rgba(0,0,0,.18);padding-bottom:4px}
+.rg{display:flex;justify-content:space-between;gap:14px;padding:8px 0;border-bottom:1px dotted rgba(0,0,0,.18);font-size:14px;line-height:1.35}
+.rg b{font-family:var(--mono);font-weight:700;flex:none}
+.rg b.neg{color:#a01410}.rg b.pos{color:#1c7a3f}
+.foglio p{font-size:13.5px;line-height:1.55;margin:10px 0 0;color:#3a332b}
+.timbro{margin-top:22px;border:2px solid #a01410;color:#a01410;border-radius:8px;padding:10px 12px;transform:rotate(-1.2deg);font-family:var(--cond);font-size:13px;letter-spacing:.06em;text-transform:uppercase;line-height:1.3;text-align:center}
+#esciBtn{width:100%;margin-top:16px;padding:13px;border-radius:12px;border:1px solid var(--linea);color:var(--testo-3);font-family:var(--cond);font-size:12px;letter-spacing:.16em;text-transform:uppercase}
+nav{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;background:var(--muretto);border-top:1px solid var(--linea);padding-bottom:env(safe-area-inset-bottom)}
+nav button{flex:1;padding:16px 4px 15px;font-family:var(--cond);font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--testo-3);position:relative;transition:color 180ms ease}
+nav button::after{content:"";position:absolute;top:-1px;left:50%;width:0;height:2px;background:var(--box);transform:translateX(-50%);transition:width 220ms var(--out)}
+nav button.on{color:var(--box)}
+nav button.on::after{width:38px}
+#iscrizione{padding:44px 22px calc(40px + env(safe-area-inset-bottom));max-width:520px;margin:0 auto}
+#iscrizione .marchio{font-size:30px}
+.indietro{display:inline-flex;align-items:center;gap:7px;margin-bottom:20px;padding:9px 15px 9px 12px;
+  border:1px solid var(--linea);border-radius:99px;color:var(--testo-2);font-family:var(--cond);
+  font-size:12px;letter-spacing:.14em;text-transform:uppercase;transition:border-color 160ms ease,color 160ms ease,transform 130ms var(--out)}
+.indietro:active{transform:scale(.97)}
+@media(hover:hover){.indietro:hover{border-color:var(--box);color:var(--box)}}
+.campo{display:block;margin-top:20px}
+.campo .eyebrow{display:block;margin-bottom:7px}
+.campo input{width:100%;background:var(--muretto);border:1px solid var(--linea);border-radius:12px;padding:15px 14px;color:var(--testo);font-family:var(--mono);font-size:17px;outline:none;transition:border-color 180ms ease}
+.campo input:focus{border-color:var(--box)}
+.coppia{display:flex;gap:8px;margin-top:7px}
+.coppia button{flex:1;padding:14px;border-radius:12px;border:1px solid var(--linea);font-family:var(--cond);font-size:14px;letter-spacing:.1em;text-transform:uppercase;color:var(--testo-2);transition:border-color 180ms ease,color 180ms ease}
+.coppia button.on{border-color:var(--box);color:var(--box)}
+#viaBtn{width:100%;margin-top:28px;padding:17px;border-radius:12px;background:var(--box);color:#160c00;font-family:var(--cond);font-weight:700;font-size:15px;letter-spacing:.16em;text-transform:uppercase;transition:transform 140ms var(--out)}
+#viaBtn:active{transform:scale(.98)}
+#viaBtn[disabled]{background:var(--muretto);color:var(--testo-3);cursor:default}
+.nota{font-size:13.5px;line-height:1.5;color:var(--testo-2);margin-top:18px}
+#velo{position:fixed;inset:0;z-index:40;background:rgba(6,9,11,.72);opacity:0;pointer-events:none;transition:opacity 200ms ease}
+#velo.on{opacity:1;pointer-events:auto}
+#sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;background:var(--muretto);border-top:1px solid var(--linea);border-radius:18px 18px 0 0;padding:18px 20px calc(20px + env(safe-area-inset-bottom));transform:translateY(102%);transition:transform 340ms cubic-bezier(.32,.72,0,1);max-width:520px;margin:0 auto;max-height:88vh;overflow:auto}
+#sheet.on{transform:translateY(0)}
+.maniglia{width:38px;height:4px;border-radius:99px;background:var(--linea);margin:0 auto 14px}
+#sheet h3{font-family:var(--cond);font-size:21px;letter-spacing:.05em;text-transform:uppercase;margin:0 0 4px}
+.riga2{display:flex;gap:8px;margin-top:14px}
+.riga2>*{flex:1;margin:0}
+.anteprima{margin-top:16px;padding:12px 14px;background:var(--asfalto);border-radius:12px;display:flex;justify-content:space-between;align-items:center}
+.anteprima b{font-family:var(--mono);font-weight:700;font-size:16px;color:var(--box)}
+.sheet-btn{width:100%;margin-top:10px;padding:16px;border-radius:12px;font-family:var(--cond);font-weight:700;font-size:14px;letter-spacing:.14em;text-transform:uppercase;transition:transform 140ms var(--out)}
+.sheet-btn:active{transform:scale(.98)}
+.sheet-btn.primo{background:var(--box);color:#160c00}
+.sheet-btn.primo[disabled]{background:var(--muretto-alto);color:var(--testo-3)}
+.sheet-btn.dopo{border:1px solid var(--linea);color:var(--testo-2)}
+.sheet-btn.rosso{border:1px solid var(--rossa);color:var(--rossa)}
+#toast{position:fixed;left:16px;right:16px;bottom:calc(88px + env(safe-area-inset-bottom));z-index:50;max-width:488px;margin:0 auto;background:var(--muretto-alto);border:1px solid var(--linea);border-radius:12px;padding:13px 15px;display:flex;justify-content:space-between;align-items:center;gap:12px;opacity:0;transform:translateY(10px) scale(.97);pointer-events:none;transition:opacity 200ms var(--out),transform 200ms var(--out)}
+#toast.on{opacity:1;transform:none}
+#toast .tt{font-family:var(--cond);font-size:14px;letter-spacing:.08em;text-transform:uppercase}
+#toast .pp{font-family:var(--mono);font-weight:700;font-size:15px}
+.gruppo>*{animation:entra 300ms var(--out) both}
+.gruppo>*:nth-child(2){animation-delay:40ms}.gruppo>*:nth-child(3){animation-delay:80ms}.gruppo>*:nth-child(4){animation-delay:120ms}
+@keyframes entra{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* ══ sfide a sorpresa ══ */
+#sfidaBox{max-width:520px;margin:0 auto;padding:0 16px}
+.sfida{margin-top:16px;border-radius:14px;border:1px solid;padding:16px;background:var(--muretto);animation:sfidaEntra 380ms var(--out) both}
+@keyframes sfidaEntra{from{opacity:0;transform:translateY(-10px) scale(.98)}to{opacity:1;transform:none}}
+.sfida .cap{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.sfida .tit{font-family:var(--cond);font-weight:700;font-size:19px;letter-spacing:.08em;text-transform:uppercase;line-height:1}
+.sfida .cd{font-family:var(--mono);font-weight:800;font-size:19px;flex:none}
+.sfida .des{font-size:14.5px;line-height:1.45;color:var(--testo-2);margin-top:8px}
+.sfida .barra{height:4px;background:var(--asfalto);border-radius:99px;margin-top:12px;overflow:hidden}
+.sfida .barra i{display:block;height:100%;border-radius:99px;transition:width 900ms linear}
+.sfida .esito{margin-top:12px;padding-top:11px;border-top:1px solid var(--linea);font-family:var(--cond);font-size:14px;letter-spacing:.08em;text-transform:uppercase}
+.opz{display:block;width:100%;margin-top:8px;padding:14px;border-radius:11px;border:1px solid var(--linea);text-align:left;font-size:15px;transition:transform 130ms var(--out),border-color 160ms ease}
+.opz:active{transform:scale(.985)}
+.opz.giusta{border-color:var(--verde);color:var(--verde)}
+.opz.sbagliata{border-color:var(--rossa);color:var(--rossa)}
+.opz[disabled]{opacity:.5}
+.luci{display:flex;gap:8px;justify-content:center;margin-top:14px}
+.luci i{width:34px;height:34px;border-radius:99px;background:#2b363d;box-shadow:inset 0 0 0 1px rgba(255,255,255,.05);transition:background 90ms linear,box-shadow 90ms linear}
+.luci i.on{background:var(--rossa);box-shadow:0 0 18px rgba(225,35,30,.7)}
+.audio{font-family:var(--cond);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--testo-3);border:1px solid var(--linea);border-radius:99px;padding:6px 11px;transition:color 160ms ease,border-color 160ms ease}
+.audio.spento{color:var(--rossa);border-color:var(--rossa)}
+.testata .destra{display:flex;align-items:center;gap:12px}
+
+/* ══ muretto (PC) ══ */
+#muretto{display:none;height:100vh;flex-direction:column;overflow:hidden}
+#mwSfida{display:none;flex:none;align-items:center;gap:26px;padding:14px 26px;border-bottom:1px solid var(--linea);background:var(--muretto-alto)}
+#mwSfida.on{display:flex}
+#mwSfida .tit{font-family:var(--cond);font-weight:700;font-size:30px;letter-spacing:.08em;text-transform:uppercase;line-height:1;flex:none}
+#mwSfida .des{flex:1;min-width:0;font-size:15px;color:var(--testo-2);line-height:1.35}
+#mwSfida .cd{font-family:var(--mono);font-weight:800;font-size:38px;line-height:1;flex:none}
+#mwLancia{font-family:var(--cond);font-weight:700;font-size:12px;letter-spacing:.16em;text-transform:uppercase;border:1px solid var(--box);color:var(--box);border-radius:99px;padding:9px 15px;transition:background 160ms ease,color 160ms ease}
+@media(hover:hover){#mwLancia:hover{background:var(--box);color:#160c00}}
+#muretto.on{display:flex}
+.mw-top{display:flex;align-items:center;justify-content:space-between;padding:14px 26px;border-bottom:1px solid var(--linea);background:var(--muretto);flex:none}
+.mw-top .marchio{font-size:24px}
+.mw-stat{display:flex;gap:34px;align-items:center}
+.mw-stat div{text-align:right}
+.mw-stat b{display:block;font-family:var(--mono);font-weight:800;font-size:24px;line-height:1.15}
+.mw-corpo{flex:1;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:1px;background:var(--linea);min-height:0}
+@media(max-width:1000px){.mw-corpo{grid-template-columns:1fr;grid-template-rows:1fr 1fr}}
+.mw-pan{background:var(--asfalto);display:flex;flex-direction:column;min-height:0}
+.mw-lab{padding:11px 22px;border-bottom:1px solid var(--linea);display:flex;justify-content:space-between;align-items:center;flex:none}
+.mw-scroll{flex:1;overflow:auto;min-height:0}
+.mwr{display:flex;align-items:center;border-bottom:1px solid var(--linea);height:64px}
+.mwr .fl{width:6px;height:100%;flex:none}
+.mwr .p{width:56px;flex:none;text-align:center;font-family:var(--mono);font-weight:800;font-size:22px;color:var(--testo-3)}
+.mwr.p1 .p{color:var(--box)}
+.mwr .nm{flex:1;min-width:0;padding-right:12px}
+.mwr .nm b{display:block;font-family:var(--cond);font-weight:700;font-size:25px;letter-spacing:.03em;text-transform:uppercase;line-height:1.05;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mwr .nm span{font-family:var(--mono);font-size:12px;color:var(--testo-3)}
+.mwr .col{width:92px;flex:none;text-align:right;padding-right:20px}
+.mwr .col i{display:block;font-family:var(--cond);font-style:normal;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--testo-3)}
+.mwr .col b{font-family:var(--mono);font-weight:800;font-size:22px;line-height:1.15}
+#mappa{flex:1;width:100%;min-height:0;display:block}
+#mappaL{background:#0d1114}
+.leaflet-container{background:#0d1114!important;font-family:var(--body)}
+.leaflet-tile{filter:invert(1) hue-rotate(180deg) brightness(.82) contrast(.92) saturate(.6)}
+.leaflet-control-attribution{background:rgba(18,23,26,.85)!important;color:var(--testo-3)!important;font-size:9px!important}
+.leaflet-control-attribution a{color:var(--testo-2)!important}
+.leaflet-control-zoom a{background:var(--muretto)!important;color:var(--testo)!important;border-color:var(--linea)!important}
+.pin{display:flex;flex-direction:column;align-items:center;transform:translateY(-6px)}
+.pin i{width:14px;height:14px;border-radius:99px;border:2px solid #0d1114;box-shadow:0 0 0 4px rgba(255,255,255,.08)}
+.pin b{font-family:var(--cond);font-weight:700;font-size:12px;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--testo);background:rgba(18,23,26,.9);border-radius:5px;padding:1px 6px;margin-top:4px;white-space:nowrap}
+.feed{padding:0 22px}
+.fev{display:flex;gap:14px;align-items:baseline;padding:9px 0;border-bottom:1px solid var(--linea)}
+.fev .o{font-family:var(--mono);font-size:12px;color:var(--testo-3);flex:none}
+.fev .w{flex:1;font-family:var(--cond);font-size:16px;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fev .d{font-family:var(--mono);font-weight:700;font-size:13px;flex:none}
+#mwEsci{position:fixed;right:14px;bottom:12px;z-index:30;font-family:var(--cond);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--testo-3);border:1px solid var(--linea);border-radius:99px;padding:7px 13px;background:var(--muretto)}
+/* ══ modalità tavolo: schermo spento ma pagina viva ══ */
+#riposo{position:fixed;inset:0;z-index:60;background:#000;display:none;flex-direction:column;
+  align-items:center;justify-content:center;gap:22px;text-align:center;padding:30px;
+  transition:background 400ms ease}
+#riposo.on{display:flex}
+#riposo .bac{font-family:var(--mono);font-weight:800;font-size:64px;line-height:.9;color:#1e2a2f;transition:color 400ms ease}
+#riposo .fl{width:12px;height:12px;border-radius:3px;background:#1e2a2f;transition:background 400ms ease}
+#riposo .et{font-family:var(--cond);font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:#16202400}
+#riposo .nota{font-family:var(--cond);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#161e22;position:absolute;bottom:36px}
+#riposo .sf{font-family:var(--cond);font-size:26px;letter-spacing:.1em;text-transform:uppercase;color:#1e2a2f;line-height:1.2}
+#riposo .cd{font-family:var(--mono);font-weight:800;font-size:44px;color:#1e2a2f}
+#riposo.sveglia{background:#0a0e10}
+#riposo.sveglia .bac,#riposo.sveglia .sf,#riposo.sveglia .cd{color:var(--testo)}
+#riposo.sveglia .nota{color:var(--testo-3)}
+@media (prefers-reduced-motion: reduce){*{animation-duration:.01ms !important;transition-duration:120ms !important}}
+</style>
+
+<script type="module">
+  window._FB=null;
+  window.caricaFirebase=async function(){
+    if(window._FB) return window._FB;
+    try{
+      const app=await import('https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js');
+      const db =await import('https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js');
+      window._FB={app,db}; return window._FB;
+    }catch(e){ console.error('Firebase',e); return null; }
+  };
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.5.4/peerjs.min.js"></script>
+
+<div id="scelta">
+  <div class="marchio">BOX <em>BOX</em> BOX</div>
+  <div class="sotto">Varano · night session</div>
+  <div class="postazioni">
+    <button class="post" data-m="pilota">
+      <div class="k">📱</div><h3>Sono un pilota</h3>
+      <p>Registri i tuoi pit stop, vedi la tua alcolemia stimata e finisci in classifica. Dal telefono.</p>
+    </button>
+    <button class="post" data-m="muretto">
+      <div class="k">🖥️</div><h3>Sono il muretto</h3>
+      <p>Schermo grande: torre di classifica live, mappa GPS della griglia e feed dei pit stop. Sul PC.</p>
+    </button>
+  </div>
+  <div class="conn">
+    <div class="conn-top"><span class="eyebrow">Collegamento dati</span><span class="eyebrow" id="connStato">—</span></div>
+    <button class="conn-btn" id="linguaBtn" style="margin-bottom:12px">🇬🇧 English</button>
+    <div id="connCorpo"></div>
+  </div>
+  <p class="nota">Stessa pagina, due postazioni.</p>
+</div>
+
+<div id="fisso" style="display:none"><div id="app"></div></div>
+
+<div id="muretto">
+  <div class="mw-top">
+    <div><div class="marchio">BOX <em>BOX</em> BOX</div><div class="sotto">Muretto · Varano</div></div>
+    <div class="mw-stat">
+      <div><span class="eyebrow">Codice gara</span><b id="mwCodice" style="font-size:17px;color:var(--box)">—</b></div>
+      <div><span class="eyebrow">In griglia</span><b id="mwN">0</b></div>
+      <div><span class="eyebrow">Unità totali</span><b id="mwU">0</b></div>
+      <div><span class="eyebrow">Sotto limite</span><b id="mwOk" style="color:var(--verde)">0</b></div>
+      <div><span class="eyebrow">Ora</span><b id="mwOra">--:--</b></div>
+      <button id="mwLancia">Nuova sfida</button>
+      <button class="audio" id="mwCoda">Proposte</button>
+      <button class="audio" id="mwReport">Report</button>
+      <button class="audio" id="mwAudio">🔊</button>
+      <button class="audio" id="mwReset" style="border-color:var(--rossa);color:var(--rossa)">Azzera</button>
+    </div>
+  </div>
+  <div id="mwSfida"><div class="tit"></div><div class="des"></div><div class="cd"></div></div>
+  <div class="mw-corpo">
+    <div class="mw-pan">
+      <div class="mw-lab"><span class="eyebrow">Torre di classifica</span>
+        <span style="display:flex;gap:10px;align-items:center">
+          <span class="eyebrow" id="mwDiag">—</span>
+          <button class="audio" id="mwProva">+ pilota di prova</button>
+          <button class="audio" id="mwPulisci">pulisci prove</button>
+        </span></div>
+      <div class="mw-scroll" id="mwTorre"></div>
+    </div>
+    <div class="mw-pan">
+      <div class="mw-lab"><span class="eyebrow">Tracciamento GPS</span><span class="eyebrow" id="mwScala">—</span></div>
+      <div id="mappaL" style="flex:1;min-height:0;display:none"></div>
+  <canvas id="mappa"></canvas>
+      <div class="mw-lab" style="border-top:1px solid var(--linea);border-bottom:none"><span class="eyebrow">Ultimi pit stop</span></div>
+      <div class="mw-scroll feed" id="mwFeed" style="max-height:36%"></div>
+    </div>
+  </div>
+  <button id="mwEsci">Cambia postazione</button>
+</div>
+
+<div id="riposo">
+  <span class="fl" id="rpFl"></span>
+  <div class="bac" id="rpBac">0.00</div>
+  <div class="sf" id="rpSf"></div>
+  <div class="cd" id="rpCd"></div>
+  <div class="nota">Tocca per riaccendere</div>
+</div>
+<div id="velo"></div>
+<div id="sheet"><div class="maniglia"></div><div id="sheetCorpo"></div></div>
+<div id="toast"><span class="tt"></span><span class="pp"></span></div>
+
+<script>
+/* ═══ BOX BOX BOX — Varano ═══ */
+const K_GRIGLIA="varano:griglia:v3", K_CATALOGO="varano:catalogo:v3",
+      K_LOCALE="varano:pilota:v3", K_MODO="varano:modo:v3", K_SESSIONE="varano:sessione:v3", K_CUSTOM="varano:sfide:v3", K_RESET="varano:reset:v3", K_PROP="varano:proposte:v3";
+const VERSIONE="v6.1 · relay + cloud";
+const PWD_MURETTO="scuderia99";
+const DECAD=0.15, LIMITE=0.5, VARANO={lat:44.6836,lng:10.0217};
+const grammiDi=(ml,abv)=>ml*(abv/100)*0.789;
+
+const CATALOGO_BASE=[
+  {id:"birra33",nome:"Birra 33",ico:"🍺",ml:330,abv:5},
+  {id:"birra50",nome:"Birra 50",ico:"🍻",ml:500,abv:5},
+  {id:"vino",nome:"Vino",ico:"🍷",ml:125,abv:12.5},
+  {id:"spritz",nome:"Spritz",ico:"🥂",ml:200,abv:9},
+  {id:"shot",nome:"Shot",ico:"🥃",ml:40,abv:40},
+  {id:"amaro",nome:"Amaro",ico:"🌿",ml:50,abv:30},
+];
+const BANDIERE={
+  verde:{nome:"Bandiera verde",testo:"in gara",c:"--verde"},
+  gialla:{nome:"Bandiera gialla",testo:"in gara, prudenza",c:"--gialla"},
+  rossa:{nome:"Bandiera rossa",testo:"oltre il limite di guida",c:"--rossa"},
+};
+const col=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim()||"#00d06c";
+
+
+/* ═══ LINGUA ═══ */
+let lingua="it";   // valore reale letto all'avvio, quando l'archivio locale esiste già
+const L10N={
+  it:{
+    sotto:"Varano · night session", iscrizioni:"Varano · foglio iscrizioni",
+    pilotaTit:"Sono un pilota", pilotaDes:"Registri i tuoi pit stop, vedi la tua alcolemia stimata e finisci in classifica. Dal telefono.",
+    muroTit:"Sono il muretto", muroDes:"Schermo grande: torre di classifica live, mappa GPS della griglia e feed dei pit stop. Sul PC.",
+    scelNota:"Stessa pagina, due postazioni. Classifica, catalogo bevande e posizioni sono condivisi fra tutti quelli che aprono il link.",
+    conn:"Collegamento dati", inGriglia:"In griglia", codice:"Codice gara", unitaTot:"Unità totali", sottoLim:"Sotto limite", ora:"Ora",
+    torre:"Torre di classifica", gps:"Tracciamento GPS", ultimi:"Ultimi pit stop", lancia:"Nuova sfida", azzeraB:"Azzera",
+    cambiaPost:"Cambia postazione", provaPil:"+ pilota di prova", pulisci:"pulisci prove",
+    tabBox:"Il mio box", tabTorre:"Torre", tabReg:"Regolamento",
+    alcolemia:"Alcolemia stimata", puntiUn:"Punti · unità bevute", limite:"limite 0,50",
+    radioBox:"Radio box", posizione:"Posizione in diretta",
+    gpsOff:"Spenta. Accendila e comparirai sulla mappa del muretto.", gpsAgg:"Aggiorna posizione",
+    correggi:"Correggi la mia iscrizione", registra:"Registra pit stop", modifica:"Modifica", fatto:"Fatto",
+    aggiungi:"+ Aggiungi", acquaBtn:"💧 Acqua — sosta · −6", annulla:"Annulla ultimo",
+    sfideGruppo:"Sfide del gruppo", scrivine:"+ Scrivine una", nastro:"Nastro stint",
+    classLive:"Classifica live", grigliaVuota:"Griglia vuota",
+    grigliaVuotaDes:"Passa il link al tavolo: chi lo apre entra in classifica.",
+    nome:"Nome pilota", peso:"Peso in kg", metab:"Metabolismo", uomo:"Uomo", donna:"Donna",
+    entra:"Entra in griglia", indietro:"← Indietro", chiusa:"CHIUSA",
+    iscrNota:"Peso e metabolismo servono solo a stimare l'alcolemia e restano su questo telefono. In torre gli altri vedono nome, unità e bandiera.",
+    unita:"un", bicchieri:"bicchieri", acque:"acque", punti:"Punti", unitaC:"Unità",
+    cambiaPil:"Cambia pilota su questo telefono", audio:"Audio", tavolo:"🌙 Tavolo", riaccendi:"Tocca per riaccendere",
+  },
+  en:{
+    sotto:"Varano · night session", iscrizioni:"Varano · entry form",
+    pilotaTit:"I'm a driver", pilotaDes:"Log your pit stops, watch your estimated BAC and land on the timing tower. On your phone.",
+    muroTit:"I'm the pit wall", muroDes:"Big screen: live timing tower, GPS map of the grid and the pit stop feed. On the PC.",
+    scelNota:"One page, two stations. Standings, drinks catalogue and positions are shared across everyone who opens the link.",
+    conn:"Data link", inGriglia:"On the grid", codice:"Race code", unitaTot:"Total units", sottoLim:"Under limit", ora:"Time",
+    torre:"Timing tower", gps:"GPS tracking", ultimi:"Latest pit stops", lancia:"New challenge", azzeraB:"Reset",
+    cambiaPost:"Change station", provaPil:"+ test driver", pulisci:"clear tests",
+    tabBox:"My garage", tabTorre:"Tower", tabReg:"Regulations",
+    alcolemia:"Estimated BAC", puntiUn:"Points · units drunk", limite:"limit 0.50",
+    radioBox:"Team radio", posizione:"Live position",
+    gpsOff:"Off. Switch it on to appear on the pit wall map.", gpsAgg:"Refresh position",
+    correggi:"Fix my entry", registra:"Log a pit stop", modifica:"Edit", fatto:"Done",
+    aggiungi:"+ Add", acquaBtn:"💧 Water — stopping · −6", annulla:"Undo last",
+    sfideGruppo:"Your own challenges", scrivine:"+ Write one", nastro:"Stint tape",
+    classLive:"Live standings", grigliaVuota:"Empty grid",
+    grigliaVuotaDes:"Pass the link around: whoever opens it joins the standings.",
+    nome:"Driver name", peso:"Weight in kg", metab:"Metabolism", uomo:"Male", donna:"Female",
+    entra:"Join the grid", indietro:"← Back", chiusa:"CLOSED",
+    iscrNota:"Weight and metabolism are only used to estimate BAC and stay on this phone. The tower shows name, units and flag.",
+    unita:"u", bicchieri:"glasses", acque:"waters", punti:"Points", unitaC:"Units",
+    cambiaPil:"Change driver on this phone", audio:"Audio", tavolo:"🌙 Table", riaccendi:"Tap to wake",
+  }
+};
+const tr=k=>(L10N[lingua]&&L10N[lingua][k])||L10N.it[k]||k;
+function cambiaLingua(){
+  lingua = lingua==="it"?"en":"it";
+  locSet("varano:lingua",lingua);
+  location.reload();
+}
+
+/* ── sfide a sorpresa ── */
+const K_SFIDA="varano:sfida:v3";
+const CAMPO={[K_GRIGLIA]:"griglia",[K_CATALOGO]:"catalogo",[K_SFIDA]:"sfida",[K_CUSTOM]:"custom",[K_RESET]:"reset",[K_PROP]:"proposte"};
+const TIPI={
+  veloce:{nome:"Giro veloce",c:"--box",durata:5*60e3,premio:10,
+    des:"Finestra da cinque minuti: il tuo prossimo pit stop vale punteggio doppio. Uno solo a testa, e conta solo se sei sotto 0,50."},
+  duello:{nome:"Duello",c:"--rossa",durata:4*60e3,premio:30,
+    des:"Testa a testa al semaforo. Chi fa il tempo peggiore paga la penalità decisa dal tavolo."},
+  scommessa:{nome:"Scommessa",c:"--gialla",durata:5*60e3,premio:0,
+    des:"Punta i tuoi punti sulla prossima prova: se la porti a casa raddoppi, se sbagli li lasci sul tavolo."},
+  sabotaggio:{nome:"Sabotaggio",c:"--rossa",durata:4*60e3,premio:0,
+    des:"Puoi togliere 15 punti a un avversario. Ti costa 5 punti e lui saprà chi è stato."},
+  processo:{nome:"Direzione gara — convocazione",c:"--nera",durata:5*60e3,premio:20,
+    des:"Un pilota viene convocato: sessanta secondi per difendersi dall'accusa del tavolo. Assolto +20, condannato paga."},
+  quiz:{nome:"Direzione gara",c:"--verde",durata:90e3,premio:25,banco:"QUIZ",
+    des:"Novanta secondi per rispondere. Chi indovina prende +25."},
+  griglia:{nome:"Domanda di griglia",c:"--verde",durata:90e3,premio:25,
+    des:"Novanta secondi. La domanda riguarda i piloti in classifica adesso."},
+  prova:{nome:"Pit stop challenge",c:"--box",durata:4*60e3,premio:15,banco:"PROVE",
+    des:"Prova di abilità. Chi la porta a casa dichiara e prende +15."},
+  regime:{nome:"Regime speciale",c:"--gialla",durata:12*60e3,premio:-10,banco:"REGIMI",
+    des:"Regola in vigore per dodici minuti. Chi viene beccato si autodenuncia: −10."},
+  reazione:{nome:"Semaforo",c:"--rossa",durata:4*60e3,premio:25,
+    des:"Cinque luci rosse, poi buio: tocca appena si spengono. Sotto i 250 millesimi sono +25."},
+  custom:{nome:"Sfida del gruppo",c:"--box",durata:6*60e3,premio:20,
+    des:"Regola scritta da voi."},
+  diretta:{nome:"Direzione gara",c:"--box",durata:6*60e3,premio:25,
+    des:"Sfida assegnata dal muretto."},
+};
+const CHIAVI_TIPI=["veloce","duello","prova","reazione","sabotaggio","quiz","regime","griglia",
+  "veloce","prova","duello","scommessa","reazione","processo","prova","regime","quiz","sabotaggio","duello","griglia"];
+
+const QUIZ=[
+  {d:"Che cosa segnala la bandiera blu?",o:["Devi far passare chi ti sta doppiando","Olio in pista","Ultimo giro"],r:0},
+  {d:"Che cos'è l'undercut?",o:["Anticipare la sosta per guadagnare sul rivale","Tagliare la chicane","Frenare in ritardo all'interno"],r:0},
+  {d:"Il parc fermé è…",o:["Il regime di sequestro tecnico delle vetture","Il parcheggio del paddock","La corsia dei box"],r:0},
+  {d:"Il graining è…",o:["La sgranatura del battistrada","Una perdita d'olio","Un sovrasterzo in uscita"],r:0},
+  {d:"La Lancia Ypsilon Rally 4 è…",o:["Trazione anteriore turbo","Trazione integrale","Motore centrale"],r:0},
+  {d:"L'autodromo di Varano è intitolato a…",o:["Riccardo Paletti","Lorenzo Bandini","Elio de Angelis"],r:0},
+  {d:"Il DRS si può aprire…",o:["Entro un secondo dalla vettura davanti, nelle zone previste","Sempre e ovunque","Solo in qualifica"],r:0},
+  {d:"Quanti punti prende chi vince un GP di Formula 1?",o:["25","20","30"],r:0},
+  {d:"Che cos'è il camber?",o:["L'inclinazione della ruota vista di fronte","L'angolo del volante","La pressione di gonfiaggio"],r:0},
+  {d:"Il sottosterzo è quando…",o:["L'anteriore non gira e allarghi","Il posteriore scappa","Le gomme si surriscaldano"],r:0},
+  {d:"A cosa serve il differenziale autobloccante?",o:["A limitare lo slittamento fra le due ruote motrici","A cambiare marcia","A raffreddare i freni"],r:0},
+  {d:"Che cosa misura una cella di carico su una sospensione?",o:["La forza scambiata","La temperatura","L'angolo di sterzo"],r:0},
+  {d:"Il fading dei freni è…",o:["La perdita di efficacia per surriscaldamento","Uno stridio","Un bloccaggio dell'anteriore"],r:0},
+  {d:"Il tempo sul giro si scompone in…",o:["Settori","Vettori","Segmenti di coppia"],r:0},
+  {d:"La bandiera a scacchi si espone…",o:["Al termine della sessione","In caso di pioggia","All'ingresso della safety car"],r:0},
+  {d:"Che cos'è il coefficiente di deriva di uno pneumatico?",o:["Il rapporto fra forza laterale e angolo di deriva","Il consumo al giro","L'attrito volvente"],r:0},
+  {d:"La Clio Cup corre con cambio…",o:["Sequenziale","Automatico a convertitore","A cinghia variabile"],r:0},
+  {d:"Il roll centre di una sospensione è…",o:["Il punto attorno a cui rolla la cassa","Il centro del volante","Il baricentro del motore"],r:0},
+  {d:"Un turbo lag è…",o:["Il ritardo di risposta del turbocompressore","Una perdita d'olio","Un limitatore di giri"],r:0},
+  {d:"La telemetria in tempo reale serve a…",o:["Leggere i dati della vettura mentre è in pista","Registrare il traguardo","Comunicare via radio"],r:0},
+  {d:"Il downforce aumenta…",o:["Con il quadrato della velocità","In modo lineare col peso","Solo in rettilineo"],r:0},
+  {d:"Che cos'è il balance of performance?",o:["Il livellamento delle prestazioni fra vetture diverse","Il bilanciamento delle ruote","La taratura dei freni"],r:0},
+];
+const PROVE=[
+  "Recita l'alfabeto al contrario, dalla Z alla A, senza sbagliare.",
+  "Cambio gomme: quattro giri attorno al tavolo prima che scada il tempo.",
+  "Resta in equilibrio su una gamba per trenta secondi, occhi chiusi.",
+  "Elenca dieci case costruttrici automobilistiche senza ripeterti e senza fermarti.",
+  "Dieci flessioni. Vere.",
+  "Chiama qualcuno della tua rubrica e parla trenta secondi come se fossi al muretto in diretta radio.",
+  "Fatti raccontare dal tavolo il tuo difetto peggiore e ringrazia uno per uno.",
+  "Imita il pilota alla tua destra finché non ti riconoscono senza dire chi è.",
+  "Dì cinque volte di fila «trentatré trentini entrarono a Trento» senza inciampare.",
+  "Elenca in ordine i primi cinque circuiti del calendario di Formula 1 di quest'anno.",
+  "Fai il verso di un motore che scala tre marce in staccata. Il tavolo giudica.",
+  "Tocca il naso con l'indice, occhi chiusi, tre volte alternando le mani.",
+  "Racconta in trenta secondi la figuraccia peggiore che hai fatto in un weekend di gara.",
+  "Manda un messaggio vocale al gruppo della scuderia con il tuo miglior verso di partenza.",
+  "Impara a memoria e ripeti l'ordine attuale dei primi cinque in classifica.",
+  "Trova un oggetto arancione nel raggio di dieci metri e portalo al tavolo.",
+  "Convinci qualcuno che non sta giocando a prendersi un bicchiere d'acqua con te.",
+];
+const REGIMI=[
+  "Per dodici minuti si beve solo con la mano non dominante.",
+  "Vietato pronunciare i nomi propri: tutti si chiamano «pilota».",
+  "Vietato dire «birra». Si dice «carburante».",
+  "Chi guarda il telefono senza motivo si autodenuncia.",
+  "Si parla solo al plurale maiestatis: «noi riteniamo».",
+  "Vietato indicare col dito. Si indica col gomito.",
+  "Ogni frase deve finire con «…in staccata».",
+  "Vietato ridere. Chi ride si autodenuncia.",
+  "Ogni volta che qualcuno nomina la scuderia, tutti devono alzarsi in piedi.",
+  "Chi parla per primo dopo un silenzio si autodenuncia.",
+  "Vietato incrociare le braccia o accavallare le gambe.",
+  "Chi si alza dal tavolo deve annunciare «box, box» prima di muoversi.",
+];
+const BANCHI={QUIZ,PROVE,REGIMI};
+
+const L10N_SFIDE={
+  veloce:{n:"Fast lap",d:"Five-minute window: your next pit stop is worth double points. One each."},
+  duello:{n:"Duel",d:"Head to head on the lights. Slower time pays whatever the table decides."},
+  scommessa:{n:"Bet",d:"Stake your points on the next task: nail it and you double, blow it and you leave them on the table."},
+  sabotaggio:{n:"Sabotage",d:"You can take 15 points off a rival. It costs you 5 and they'll know it was you."},
+  processo:{n:"Stewards' summons",d:"One driver is summoned: sixty seconds to answer the table's charge. Cleared +20, guilty pays."},
+  quiz:{n:"Race control",d:"Ninety seconds to answer. Right answer takes +25."},
+  griglia:{n:"Grid question",d:"Ninety seconds. The answer is in the standings right now."},
+  prova:{n:"Pit stop challenge",d:"Skill task. Whoever pulls it off declares and takes +15."},
+  regime:{n:"Special rule",d:"Rule in force for twelve minutes. Whoever gets caught turns themselves in: −10."},
+  reazione:{n:"Lights out",d:"Five red lights, then dark: tap the moment they go out. Under 250 thousandths is +25."},
+  custom:{n:"Your challenge",d:"Rule written by you."},
+};
+const QUIZ_EN=[
+  {d:"What does the blue flag mean?",o:["Let the car lapping you through","Oil on track","Final lap"],r:0},
+  {d:"What is an undercut?",o:["Pitting early to gain on a rival","Cutting the chicane","Braking late up the inside"],r:0},
+  {d:"Parc fermé is…",o:["The technical impound regime for the cars","The paddock car park","The pit lane"],r:0},
+  {d:"Graining is…",o:["The tread surface tearing up","An oil leak","Oversteer on exit"],r:0},
+  {d:"The Lancia Ypsilon Rally 4 is…",o:["Front-wheel drive, turbocharged","All-wheel drive","Mid-engined"],r:0},
+  {d:"The Varano circuit is named after…",o:["Riccardo Paletti","Lorenzo Bandini","Elio de Angelis"],r:0},
+  {d:"DRS can be opened…",o:["Within one second of the car ahead, in the marked zones","Anywhere, any time","Only in qualifying"],r:0},
+  {d:"How many points does a Formula 1 race winner score?",o:["25","20","30"],r:0},
+  {d:"What is camber?",o:["Wheel tilt seen from the front","Steering angle","Tyre pressure"],r:0},
+  {d:"Understeer is when…",o:["The front won't turn and you run wide","The rear steps out","The tyres overheat"],r:0},
+  {d:"What does a limited-slip differential do?",o:["Limits slip between the two driven wheels","Changes gear","Cools the brakes"],r:0},
+  {d:"What does a load cell on a suspension measure?",o:["The force going through it","Temperature","Steering angle"],r:0},
+  {d:"Brake fade is…",o:["Loss of braking from overheating","A squeal","Front locking"],r:0},
+  {d:"Lap time is broken down into…",o:["Sectors","Vectors","Torque segments"],r:0},
+  {d:"The chequered flag is shown…",o:["At the end of the session","When it rains","When the safety car comes out"],r:0},
+  {d:"A tyre's cornering stiffness is…",o:["Lateral force over slip angle","Fuel use per lap","Rolling resistance"],r:0},
+  {d:"The Clio Cup races with a…",o:["Sequential gearbox","Torque-converter automatic","CVT"],r:0},
+  {d:"The roll centre of a suspension is…",o:["The point the body rolls about","The centre of the wheel","The engine's centre of gravity"],r:0},
+  {d:"Turbo lag is…",o:["The delay in the turbocharger's response","An oil leak","A rev limiter"],r:0},
+  {d:"Live telemetry is for…",o:["Reading car data while it's on track","Recording the finish line","Radio comms"],r:0},
+  {d:"Downforce rises…",o:["With the square of speed","Linearly with weight","Only on the straights"],r:0},
+  {d:"What is balance of performance?",o:["Levelling performance between different cars","Wheel balancing","Brake bias setup"],r:0},
+];
+const PROVE_EN=[
+  "Recite the alphabet backwards, Z to A, no mistakes.",
+  "Tyre change: four laps around the table before time runs out.",
+  "Balance on one leg for thirty seconds, eyes shut.",
+  "Name ten car manufacturers, no repeats, no pauses.",
+  "Ten press-ups. Real ones.",
+  "Call someone in your contacts and talk for thirty seconds as if you were live on team radio.",
+  "Let the table list your worst flaw and thank each of them for it.",
+  "Impersonate the driver on your right until someone works out who it is.",
+  "Say a tongue twister five times without tripping over it.",
+  "Name the first five circuits on this year's Formula 1 calendar, in order.",
+  "Do the sound of an engine going down three gears under braking. The table judges.",
+  "Touch your nose with your index finger, eyes shut, three times, alternating hands.",
+  "Tell the worst thing that has ever happened to you at a race weekend, in thirty seconds.",
+  "Send the team group chat a voice note with your best race start impression.",
+  "Memorise and recite the current top five in the standings.",
+  "Find something orange within ten metres and bring it to the table.",
+  "Talk someone who isn't playing into joining the next challenge.",
+];
+const REGIMI_EN=[
+  "For twelve minutes you drink with your weaker hand only.",
+  "No first names: everyone is called 'driver'.",
+  "The word 'beer' is banned. It's called 'fuel'.",
+  "Anyone checking their phone for no reason turns themselves in.",
+  "Everyone speaks in the royal we: 'we believe…'.",
+  "No pointing with fingers. Point with your elbow.",
+  "Every sentence has to end with '…under braking'.",
+  "No laughing. Whoever laughs turns themselves in.",
+  "No crossing your arms or your legs.",
+  "Anyone leaving the table has to call 'box, box' before moving.",
+  "Every time someone names the team, everyone stands up.",
+  "Whoever speaks first after a silence turns themselves in.",
+];
+const banco=n=>lingua==="en"?({QUIZ:QUIZ_EN,PROVE:PROVE_EN,REGIMI:REGIMI_EN})[n]:BANCHI[n];
+const nomeTipo=k=>lingua==="en"&&L10N_SFIDE[k]?L10N_SFIDE[k].n:TIPI[k].nome;
+const desTipo=k=>lingua==="en"&&L10N_SFIDE[k]?L10N_SFIDE[k].d:TIPI[k].des;
+
+const rnd=s=>{const x=Math.sin(s)*10000;return x-Math.floor(x)};
+let sfida=null, suonata=null, muto=false, giocoAttivo=false, opzGriglia=null;
+let ultimaPos=null, ultimoInvio=0, gpsBattito=null;
+const metri=(a,b)=>Math.hypot((b.lng-a.lng)*111320*Math.cos(a.lat*Math.PI/180),(b.lat-a.lat)*111320);
+
+/* ── audio: sirena del muretto ── */
+let AC=null;
+function sbloccaAudio(){
+  try{ if(!AC) AC=new (window.AudioContext||window.webkitAudioContext)(); if(AC.state==="suspended") AC.resume(); }catch(e){}
+}
+function bip(f,quando,dur,vol=.13,onda="square"){
+  if(!AC) return;
+  const o=AC.createOscillator(), g=AC.createGain();
+  o.type=onda; o.frequency.value=f;
+  g.gain.setValueAtTime(0,quando);
+  g.gain.linearRampToValueAtTime(vol,quando+.012);
+  g.gain.exponentialRampToValueAtTime(.0001,quando+dur);
+  o.connect(g); g.connect(AC.destination); o.start(quando); o.stop(quando+dur+.03);
+}
+function suona(che){
+  if(muto) return; sbloccaAudio(); if(!AC) return;
+  const t=AC.currentTime;
+  if(che==="sfida"){ [880,1174,1568].forEach((f,i)=>bip(f,t+i*.13,.16,.14)); bip(1568,t+.46,.42,.11); }
+  if(che==="luce") bip(700,t,.16,.16);
+  if(che==="via") bip(1480,t,.5,.18);
+  if(che==="ok"){ bip(1046,t,.13); bip(1568,t+.11,.3); }
+  if(che==="no"){ bip(220,t,.28,.14,"sawtooth"); }
+  if(che==="anticipo"){ bip(180,t,.5,.16,"sawtooth"); }
+}
+
+let io=null, griglia={}, catalogo=[...CATALOGO_BASE], custom=[], modo=null, tab="box", nTacche=0, modifica=false, gpsId=null;
+
+let diagErr=null, diagLetto=0, diagSync=0, diagScritto=0;
+
+/* ═══ LIVELLO DATI ═══
+   Tre canali, in ordine di preferenza:
+     "rete"      → sessione su server pubblico, condivisa fra tutti i dispositivi
+     "anteprima" → archivio dell'anteprima della chat (solo lì dentro)
+     "locale"    → questo dispositivo e basta, senza sincronia
+   La memoria del dispositivo (pilota, postazione) sta sempre in locale.        */
+let backend="locale";
+const NET={id:null};
+let doc={griglia:{},catalogo:null,sfida:null,custom:null,reset:0,proposte:null,auto:true};
+
+/* memoria locale, con riserva in RAM se il browser la blocca (file://) */
+const RAM={};
+function locSet(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)) }catch(e){ RAM[k]=v } }
+function locGet(k){ try{ const r=localStorage.getItem(k); return r?JSON.parse(r):(k in RAM?RAM[k]:null) }catch(e){ return k in RAM?RAM[k]:null } }
+function locDel(k){ try{ localStorage.removeItem(k) }catch(e){} delete RAM[k]; }
+
+
+
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   CANALE CLOUD (Firestore) — l'account lo fa UNA persona sola.
+   Gli altri ricevono un link che contiene già la configurazione: non
+   si registrano, non installano, non incollano niente.
+
+   DIMENSIONAMENTO — piano gratuito: 50.000 letture e 20.000 scritture
+   al giorno. Con 300 piloti la struttura ingenua le brucia in un'ora,
+   quindi:
+     · gare/{g}/stato/corrente  documento PICCOLO, ascoltato da tutti:
+       contiene solo sfida, cataloghi e azzeramenti. Cambia una trentina
+       di volte a serata → ~9.000 letture, non ogni 20 secondi.
+     · gare/{g}/stato/classifica scritto dal muretto, letto dai piloti
+       SOLO quando aprono la torre: niente ascolto permanente.
+     · gare/{g}/piloti/{id}     un documento per pilota, scritto da lui.
+     · GPS a cadenza ridotta quando la griglia è grande.
+   Stima a 300 piloti per una serata di 5 ore: ~20.000 letture e
+   ~10.000 scritture, dentro il gratuito con margine.                  */
+const FB={m:null,app:null,db:null,gara:null,cfg:null,stop:[],on:false,
+          letture:0,scritture:0,aggAl:0,ultimaAggr:""};
+
+async function fbMod(){
+  if(FB.m) return FB.m;
+  if(typeof window.caricaFirebase!=="function") throw new Error("modulo non disponibile");
+  FB.m=await window.caricaFirebase();
+  if(!FB.m) throw new Error("caricamento Firebase fallito (rete bloccata?)");
+  return FB.m;
+}
+const fbD=(...v)=>FB.m.db.doc(FB.db,...v);
+const fbC=(...v)=>FB.m.db.collection(FB.db,...v);
+
+async function fbConnetti(cfg,gara){
+  const m=await fbMod();
+  FB.cfg=cfg; FB.gara=gara;
+  FB.app=m.app.initializeApp(cfg,"bxbx-"+Date.now());
+  FB.db=m.db.getFirestore(FB.app);
+  backend="cloud"; FB.on=true; NET.id=gara; diagErr=null;
+
+  FB.stop.push(m.db.onSnapshot(fbD("gare",gara,"stato","corrente"),snap=>{
+    FB.letture++;
+    if(!snap.exists()) return;
+    const d=snap.data()||{};
+    doc.reset=d.reset||0;
+    if(Array.isArray(d.catalogo)&&d.catalogo.length) catalogo=doc.catalogo=d.catalogo;
+    if(Array.isArray(d.custom)) custom=doc.custom=d.custom;
+    const sf=d.sfida||null; doc.sfida=sf;
+    if(sf&&(!sfida||sfida.id!==sf.id)&&(!sfidaMirataViva()||(sf.inizio||0)>(sfida.inizio||0))){
+      sfida=sf; suonata=null; ciclaSfide();
+    }
+    diagSync=Date.now();
+    if(modo==="pilota"&&io) applicaReset();
+    aggiornaVista();
+  },e=>{diagErr="stato: "+e.message}));
+
+  if(modo==="muretto"){
+    FB.stop.push(m.db.onSnapshot(fbC("gare",gara,"piloti"),snap=>{
+      snap.docChanges().forEach(c=>{
+        FB.letture++;
+        if(c.type==="removed") delete griglia[c.doc.id];
+        else { const v=c.doc.data(); if(v&&v.id) griglia[v.id]=v; }
+      });
+      doc.griglia=griglia; diagLetto=Object.keys(griglia).length; diagSync=Date.now();
+      disegnaMuretto();
+    },e=>{diagErr="piloti: "+e.message}));
+    FB.stop.push(m.db.onSnapshot(fbC("gare",gara,"proposte"),snap=>{
+      const p=[]; snap.forEach(d=>{FB.letture++; p.push({...d.data(),rid:d.id})});
+      doc.proposte=p; disegnaMuretto();
+    },e=>{}));
+    const st=await m.db.getDoc(fbD("gare",gara,"stato","corrente")); FB.letture++;
+    if(!st.exists()) await fbStato({sfida:null,catalogo:CATALOGO_BASE,custom:[],reset:0,creata:Date.now()});
+  } else {
+    const mio=io||locGet(K_LOCALE);
+    if(mio&&mio.id){
+      FB.stop.push(m.db.onSnapshot(fbD("gare",gara,"piloti",mio.id),snap=>{
+        FB.letture++;
+        const d=snap.data(); if(!d) return;
+        if(d.sfidaDiretta&&(!sfida||sfida.id!==d.sfidaDiretta.id)) nuovaSfidaLocale(d.sfidaDiretta);
+        if(d.msg&&d.msg.ts!==(io&&io.msgVisto)){ mostraMessaggio(d.msg); if(io){io.msgVisto=d.msg.ts; locSet(K_LOCALE,io);} }
+      },e=>{diagErr="mio doc: "+e.message}));
+      if(io) await fbPilota(io);
+    }
+  }
+  return gara;
+}
+
+async function fbStato(patch){
+  if(!FB.on) return false;
+  try{ await FB.m.db.setDoc(fbD("gare",FB.gara,"stato","corrente"),{...patch,ts:Date.now()},{merge:true});
+       FB.scritture++; diagScritto=Date.now(); return true }
+  catch(e){ diagErr="stato: "+e.message; return false }
+}
+async function fbPilota(p){
+  if(!FB.on||!p) return false;
+  try{ await FB.m.db.setDoc(fbD("gare",FB.gara,"piloti",p.id),{...p,ts:Date.now()},{merge:true});
+       FB.scritture++; diagScritto=Date.now(); return true }
+  catch(e){ diagErr="pilota: "+e.message; return false }
+}
+async function fbAlPilota(id,campo,valore){
+  if(!FB.on) return false;
+  try{ await FB.m.db.setDoc(fbD("gare",FB.gara,"piloti",id),{[campo]:valore},{merge:true}); FB.scritture++; return true }
+  catch(e){ diagErr="invio: "+e.message; return false }
+}
+async function fbClassificaLeggi(){
+  if(!FB.on) return null;
+  try{ const s=await FB.m.db.getDoc(fbD("gare",FB.gara,"stato","classifica")); FB.letture++;
+       return s.exists()?(s.data().righe||[]):[] }catch(e){ return null }
+}
+async function fbClassificaScrivi(){
+  if(!FB.on||modo!=="muretto") return;
+  const n=Object.keys(griglia).length;
+  const ogni=n<25?10000:n<100?20000:30000;
+  if(Date.now()-FB.aggAl<ogni) return;
+  const righe=classifica().slice(0,n<80?50:25).map((r,i)=>({p:i+1,id:r.p.id,nome:r.p.nome,punti:r.s.punti,unita:+r.s.unita.toFixed(1),bac:+r.s.bac.toFixed(2)}));
+  const imp=JSON.stringify(righe);
+  if(imp===FB.ultimaAggr) return;
+  FB.aggAl=Date.now(); FB.ultimaAggr=imp;
+  try{ await FB.m.db.setDoc(fbD("gare",FB.gara,"stato","classifica"),{righe,tot:n,ts:Date.now()}); FB.scritture++ }catch(e){}
+}
+async function fbProponi(pr){
+  try{ await FB.m.db.addDoc(fbC("gare",FB.gara,"proposte"),pr); FB.scritture++; return true }
+  catch(e){ diagErr="proposta: "+e.message; return false }
+}
+async function fbTogliProposta(rid){ try{ await FB.m.db.deleteDoc(fbD("gare",FB.gara,"proposte",rid)); FB.scritture++ }catch(e){} }
+async function fbTogliPilota(id){ try{ await FB.m.db.deleteDoc(fbD("gare",FB.gara,"piloti",id)); FB.scritture++ }catch(e){} }
+function fbChiudi(){ FB.stop.forEach(u=>{try{u()}catch(e){}}); FB.stop.length=0; FB.on=false; FB.db=null; FB.gara=null; }
+
+/* autodiagnosi: scrive, rilegge, ascolta e cronometra il giro completo */
+async function fbCollaudo(){
+  const esiti=[];
+  const t=(n,ok,d)=>esiti.push({n,ok,d});
+  try{
+    const m=await fbMod(); t("Moduli Firebase caricati",true,"");
+    const t0=Date.now();
+    const rif=fbD("gare",FB.gara,"stato","collaudo");
+    await m.db.setDoc(rif,{quando:Date.now(),da:modo}); FB.scritture++;
+    t("Scrittura",true,(Date.now()-t0)+" ms");
+    const t1=Date.now();
+    const letto=await m.db.getDoc(rif); FB.letture++;
+    t("Rilettura",letto.exists(),(Date.now()-t1)+" ms");
+    const t2=Date.now();
+    const arrivato=await new Promise(ris=>{
+      const scad=setTimeout(()=>ris(false),8000);
+      const stop=m.db.onSnapshot(rif,s=>{ if(s.exists()&&s.data().ping){ clearTimeout(scad); stop(); ris(true) } });
+      setTimeout(()=>m.db.setDoc(rif,{ping:Date.now()},{merge:true}),300);
+    });
+    t("Push in tempo reale",arrivato,arrivato?(Date.now()-t2)+" ms":"nessuna notifica in 8 s");
+    const pil=await m.db.getDocs(fbC("gare",FB.gara,"piloti")); FB.letture+=Math.max(1,pil.size);
+    t("Lettura griglia",true,pil.size+" piloti");
+  }catch(e){ t("Errore",false,e.message) }
+  return esiti;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   CANALE RELAY — lo stesso schema della telemetria live di Race
+   Engineer Pro: PeerJS con TURN ad autenticazione statica, e MQTT su
+   WebSocket sicuro come riserva. Nessun account, nessuna chiave: basta
+   il codice gara, e funziona con ogni telefono sulla propria linea.
+
+   Il box ascolta TUTTI i broker in parallelo, perché ogni telefono si
+   aggancia al primo che gli risponde e non è detto sia lo stesso.      */
+const MQTT_CDN=["https://cdnjs.cloudflare.com/ajax/libs/mqtt/5.10.1/mqtt.min.js",
+                "https://unpkg.com/mqtt@5.10.1/dist/mqtt.min.js",
+                "https://cdn.jsdelivr.net/npm/mqtt@5.10.1/dist/mqtt.min.js",
+                "https://unpkg.com/mqtt/dist/mqtt.min.js"];
+const MQ_BROKER=["wss://broker.emqx.io:8084/mqtt",
+                 "wss://broker.hivemq.com:8884/mqtt",
+                 "wss://test.mosquitto.org:8081",
+                 "wss://mqtt.eclipseprojects.io/mqtt"];
+const MQ={clients:[],code:null,attivo:false,vivi:0,ultimoStato:"",pubAl:0,inviati:0,ricevuti:0,byte:0};
+
+function caricaMqtt(){
+  return new Promise((ok,no)=>{
+    if(typeof window.mqtt!=="undefined") return ok();
+    let i=0;
+    (function next(){
+      if(i>=MQTT_CDN.length) return no(new Error("libreria MQTT non raggiungibile"));
+      const sc=document.createElement("script");
+      sc.src=MQTT_CDN[i++];
+      sc.onload=()=>typeof window.mqtt!=="undefined"?ok():next();
+      sc.onerror=next;
+      document.head.appendChild(sc);
+    })();
+  });
+}
+
+/* TURN Open Relay ad autenticazione statica: la credenziale è un HMAC
+   sul timestamp, quella fissa non è più valida da tempo. */
+function iceStatico(){
+  return new Promise(ris=>{
+    try{
+      if(!(window.crypto&&crypto.subtle&&window.TextEncoder)) return ris(null);
+      const enc=new TextEncoder();
+      const utente=String(Math.floor(Date.now()/1000)+12*3600);
+      crypto.subtle.importKey("raw",enc.encode("openrelayprojectsecret"),{name:"HMAC",hash:"SHA-1"},false,["sign"])
+        .then(k=>crypto.subtle.sign("HMAC",k,enc.encode(utente)))
+        .then(sig=>{
+          const b=new Uint8Array(sig); let t="";
+          for(let i=0;i<b.length;i++) t+=String.fromCharCode(b[i]);
+          ris({iceServers:[
+            {urls:"stun:stun.l.google.com:19302"},
+            {urls:["turn:staticauth.openrelay.metered.ca:80",
+                   "turn:staticauth.openrelay.metered.ca:443",
+                   "turn:staticauth.openrelay.metered.ca:443?transport=tcp",
+                   "turns:staticauth.openrelay.metered.ca:443?transport=tcp"],
+             username:utente, credential:btoa(t)}
+          ]});
+        }).catch(()=>ris(null));
+    }catch(e){ ris(null) }
+  });
+}
+
+const topStato =c=>"boxbox/"+c.toLowerCase()+"/stato";
+const topPilota=(c,id)=>"boxbox/"+c.toLowerCase()+"/pilota/"+(id||"+");
+const topProp  =c=>"boxbox/"+c.toLowerCase()+"/prop";
+const topDm    =(c,id)=>"boxbox/"+c.toLowerCase()+"/dm/"+id;
+
+async function relayAvvia(code){
+  await caricaMqtt();
+  MQ.code=code; MQ.clients=[]; MQ.vivi=0;
+  backend="relay"; NET.id=code; diagErr=null;
+  const mio=io||locGet(K_LOCALE);
+  const sottoscrizioni = modo==="muretto"
+    ? [topPilota(code),topProp(code)]
+    : [topStato(code)].concat(mio&&mio.id?[topDm(code,mio.id)]:[]);
+
+  /* Il muretto sta su tutti i broker, perché deve raccogliere chiunque.
+     I piloti ne tengono UNO solo: con 300 telefoni, quattro connessioni
+     a testa farebbero 1200 sessioni su server pubblici di prova, ed è
+     esattamente il modo per farsi buttare fuori. */
+  const soloUno = modo!=="muretto";
+  return new Promise(ris=>{
+    let risolto=false;
+    MQ_BROKER.forEach(url=>{
+      let c;
+      try{ c=window.mqtt.connect(url,{connectTimeout:7000,reconnectPeriod:5000,clean:true}); }
+      catch(e){ return; }
+      MQ.clients.push(c);
+      c.on("connect",()=>{
+        if(soloUno&&MQ.vivi>0){ try{ c.end(true) }catch(e){}
+          MQ.clients=MQ.clients.filter(x=>x!==c); return; }
+        MQ.vivi++; MQ.attivo=true; diagErr=null; diagSync=Date.now();
+        sottoscrizioni.forEach(t=>{ try{ c.subscribe(t) }catch(e){} });
+        if(modo==="muretto") relayPubblicaStato(true);
+        else if(io) relayPubblicaPilota(io);
+        if(!risolto){ risolto=true; ris(code); }
+        aggiornaVista();
+      });
+      c.on("message",(t,payload)=>{
+        const testo=payload.toString();
+        if(!testo){ // canale svuotato: pilota rimosso
+          const id=t.split("/").pop();
+          if(griglia[id]){ delete griglia[id]; doc.griglia=griglia; if(modo==="muretto") disegnaMuretto(); }
+          return;
+        }
+        let d; try{ d=JSON.parse(testo) }catch(e){ return }
+        relayRicevi(t,d);
+      });
+      c.on("error",()=>{});
+      c.on("close",()=>{ if(MQ.vivi>0) MQ.vivi--; });
+    });
+    setTimeout(()=>{ if(!risolto){ risolto=true;
+      if(!MQ.vivi) diagErr="nessuno dei "+MQ_BROKER.length+" broker ha risposto — controlla la connessione";
+      MQ.vivi?ris(code):ris(null); } },9000);
+  });
+}
+
+function relayRicevi(topic,d){
+  diagSync=Date.now(); MQ.ricevuti++;
+  if(!d) return;
+  if(topic.includes("/pilota/")){
+    if(!d.id) return;
+    const vecchio=griglia[d.id];
+    if(!vecchio||(vecchio.updated||0)<=(d.updated||0)){ griglia[d.id]=d; doc.griglia=griglia; }
+    diagLetto=Object.keys(griglia).length;
+    if(modo==="muretto") disegnaMuretto();
+    return;
+  }
+  if(topic.endsWith("/prop")){
+    doc.proposte=[...(doc.proposte||[]).filter(x=>x.id!==d.id),d];
+    if(modo==="muretto") disegnaMuretto();
+    return;
+  }
+  if(topic.endsWith("/stato")){
+    if(Array.isArray(d.catalogo)&&d.catalogo.length) catalogo=doc.catalogo=d.catalogo;
+    if(Array.isArray(d.custom)) custom=doc.custom=d.custom;
+    if(Array.isArray(d.classifica)) doc.classifica=d.classifica;
+    if(d.reset) doc.reset=d.reset;
+    if(d.sfida!==undefined){
+      const s=d.sfida;
+      doc.sfida=s;
+      // una sfida mirata resiste, ma una lanciata dopo la supera
+      if(s&&(!sfida||sfida.id!==s.id)&&(!sfidaMirataViva()||(s.inizio||0)>(sfida.inizio||0))){
+        sfida=s; suonata=null; ciclaSfide();
+      }
+    }
+    if(modo==="pilota"&&io) applicaReset();
+    aggiornaVista();
+    return;
+  }
+  if(topic.includes("/dm/")){
+    if(d.tipoMsg==="radio") mostraMessaggio(d);
+    else if(d.id&&(!sfida||sfida.id!==d.id)) nuovaSfidaLocale(d);
+  }
+}
+
+function relayPubblica(topic,dati,retain){
+  let inviato=false;
+  const j=JSON.stringify(dati);
+  MQ.clients.forEach(c=>{ try{ c.publish(topic,j,{retain:!!retain}); inviato=true }catch(e){} });
+  if(inviato){ diagScritto=Date.now(); MQ.inviati++; MQ.byte+=j.length; }
+  return inviato;
+}
+/* ritenuto: il broker conserva l'ultimo stato di ogni pilota, così un
+   muretto che si ricollega ritrova l'intera griglia senza chiedere niente */
+function relayPubblicaPilota(p){ if(p) relayPubblica(topPilota(MQ.code,p.id),p,true); }
+/* con 300 iscritti, ripubblicare la classifica ogni due secondi significa
+   spingere megabyte al minuto verso 300 abbonati: i broker pubblici lo
+   tagliano. La cadenza e la lunghezza si adattano al numero di piloti. */
+function cadenzaStato(){
+  const n=Object.keys(griglia).length;
+  return n<25?2000 : n<80?6000 : n<200?12000 : 20000;
+}
+function quanteRighe(){
+  const n=Object.keys(griglia).length;
+  return n<25?50 : n<80?30 : 20;
+}
+function relayPubblicaStato(forza){
+  if(modo!=="muretto"||!MQ.code) return;
+  if(!forza&&Date.now()-MQ.pubAl<cadenzaStato()) return;
+  const righe=classifica().slice(0,quanteRighe()).map((r,i)=>({p:i+1,id:r.p.id,nome:r.p.nome,punti:r.s.punti,unita:+r.s.unita.toFixed(1),bac:+r.s.bac.toFixed(2)}));
+  const st={sfida:doc.sfida||null,catalogo,custom,reset:doc.reset||0,classifica:righe,tot:Object.keys(griglia).length,ts:Date.now()};
+  const imp=JSON.stringify(st.sfida)+"|"+righe.length+"|"+JSON.stringify(righe).length+"|"+catalogo.length+"|"+custom.length+"|"+st.reset;
+  if(!forza&&imp===MQ.ultimoStato) return;
+  MQ.ultimoStato=imp; MQ.pubAl=Date.now();
+  relayPubblica(topStato(MQ.code),st,true);
+}
+function relayCancellaPilota(id){
+  MQ.clients.forEach(c=>{ try{ c.publish(topPilota(MQ.code,id),"",{retain:true}) }catch(e){} });
+}
+function relayChiudi(){
+  MQ.clients.forEach(c=>{ try{ c.end(true) }catch(e){} });
+  MQ.clients=[]; MQ.attivo=false; MQ.vivi=0; MQ.code=null;
+}
+
+/* ═══ CANALE LIVE (PeerJS/WebRTC) ═══
+   Un dispositivo fa da host — di norma il muretto — e tiene lo stato
+   autorevole. Gli altri si collegano col codice gara e ricevono ogni
+   variazione in push, senza interrogare niente. Stessa impostazione
+   della telemetria live di Race Engineer Pro.                        */
+let peer=null, conns=[], hostConn=null, ruolo=null, peerErr=null;
+/* STUN da soli non bastano dietro il NAT degli operatori mobili: senza un
+   relay TURN due telefoni su linee diverse non riescono a parlarsi. */
+let ICE=null;   // riempito da iceStatico() prima di aprire il peer
+const pid=c=>"boxbox-varano-"+String(c).toUpperCase();
+const codiceCasuale=()=>{const A="ACDEFGHJKLMNPQRSTUVWXYZ34679";let r="";for(let i=0;i<5;i++)r+=A[Math.floor(Math.random()*A.length)];return r};
+
+function aggiornaVista(){
+  if(doc&&Array.isArray(doc.custom)) custom=doc.custom;
+  if(doc&&Array.isArray(doc.catalogo)&&doc.catalogo.length) catalogo=doc.catalogo;
+  if(modo==="muretto"){ disegnaMuretto(); }
+  else if(io){ if(tab==="torre") disegnaTorre(); if(tab==="box"){ ridisegnaGriglia(); ridisegnaCustom(); disegnaBox(); } aggiornaConta(); }
+  disegnaSfida();
+}
+function trasmetti(){
+  conns=conns.filter(c=>c&&c.open);
+  for(const c of conns){ try{ c.send({t:"doc",doc}) }catch(e){} }
+  diagScritto=Date.now();
+}
+function applicaDaOspite(d){
+  if(d.t==="rec"&&d.rec&&d.rec.id) doc.griglia[d.rec.id]=d.rec;
+  else if(d.t==="cat") doc.catalogo=d.v;
+  else if(d.t==="sfida") doc.sfida=d.v;
+  else if(d.t==="custom"){ doc.custom=d.v; custom=d.v||[]; }
+  else if(d.t==="prop") doc.proposte=d.v;
+  else if(d.t==="reset") doc.reset=d.v;
+  else if(d.t==="via"&&Array.isArray(d.ids)) d.ids.forEach(i=>delete doc.griglia[i]);
+  else return;
+  diagSync=Date.now(); trasmetti(); aggiornaVista();
+}
+async function ospitaLive(codice){
+  if(!ICE) ICE=await iceStatico();
+  return new Promise((ris,rif)=>{
+    if(typeof Peer==="undefined") return rif(new Error("libreria PeerJS non caricata (serve rete)"));
+    const c=codice||codiceCasuale();
+    try{ peer=new Peer(pid(c), ICE?{debug:0,config:ICE}:{debug:0}) }catch(e){ return rif(e) }
+    const scaduto=setTimeout(()=>rif(new Error("il broker non risponde")),12000);
+    peer.on("open",()=>{ clearTimeout(scaduto); ruolo="host"; backend="live"; NET.id=c; diagErr=null; ris(c); });
+    peer.on("error",e=>{ clearTimeout(scaduto); peerErr=e&&e.type||String(e);
+      if(peerErr==="unavailable-id") rif(new Error("codice già in uso, riprova")); else rif(new Error("PeerJS: "+peerErr)); });
+    peer.on("connection",conn=>{
+      conns.push(conn);
+      conn.on("open",()=>{ try{conn.send({t:"doc",doc})}catch(e){} aggiornaVista(); });
+      conn.on("data",applicaDaOspite);
+      conn.on("close",()=>{ conns=conns.filter(x=>x!==conn); aggiornaVista(); });
+      conn.on("error",()=>{});
+    });
+  });
+}
+async function entraLive(codice){
+  if(!ICE) ICE=await iceStatico();
+  return new Promise((ris,rif)=>{
+    if(typeof Peer==="undefined") return rif(new Error("libreria PeerJS non caricata (serve rete)"));
+    try{ peer=new Peer(ICE?{debug:0,config:ICE}:{debug:0}) }catch(e){ return rif(e) }
+    const scaduto=setTimeout(()=>rif(new Error("nessuna risposta dall'host")),15000);
+    peer.on("error",e=>{ clearTimeout(scaduto); rif(new Error("PeerJS: "+(e&&e.type||e))) });
+    peer.on("open",()=>{
+      hostConn=peer.connect(pid(codice),{reliable:true});
+      hostConn.on("open",()=>{
+        clearTimeout(scaduto); ruolo="ospite"; backend="live"; NET.id=codice; diagErr=null;
+        if(io) try{hostConn.send({t:"rec",rec:io})}catch(e){}
+        ris(codice);
+      });
+      hostConn.on("data",d=>{ if(d&&d.t==="doc"&&d.doc){ doc=d.doc; diagSync=Date.now(); aggiornaVista(); } });
+      hostConn.on("close",()=>{ diagErr="host disconnesso"; aggiornaVista(); });
+      hostConn.on("error",()=>{ diagErr="connessione all'host interrotta" });
+    });
+  });
+}
+function inviaAllHost(k,v){
+  if(!hostConn||!hostConn.open) return false;
+  try{
+    if(k===K_GRIGLIA&&io) hostConn.send({t:"rec",rec:io});
+    else if(k===K_CATALOGO) hostConn.send({t:"cat",v});
+    else if(k===K_SFIDA) hostConn.send({t:"sfida",v});
+    else if(k===K_CUSTOM) hostConn.send({t:"custom",v});
+    else if(k===K_PROP) hostConn.send({t:"prop",v});
+    else if(k===K_RESET) hostConn.send({t:"reset",v});
+    return true;
+  }catch(e){ return false }
+}
+
+
+/* modifiche mie non ancora confermate dal server */
+let pend={griglia:{},rimossi:new Set(),catalogo:undefined,sfida:undefined,custom:undefined,proposte:undefined,auto:undefined};
+const possesso=new Set();   // record scritti da questo dispositivo: li tengo in vita io
+function segnaRimossi(ids){ ids.forEach(i=>{pend.rimossi.add(i); delete pend.griglia[i]; possesso.delete(i);}) }
+const vuoto=()=>!Object.keys(pend.griglia).length&&!pend.rimossi.size&&pend.catalogo===undefined&&pend.sfida===undefined&&pend.custom===undefined&&pend.proposte===undefined;
+
+
+
+let spinta=null, inVolo=false;
+
+
+const leggi=async(k,c)=>{
+  if(!c) return locGet(k);
+  if(backend==="cloud"||backend==="relay"||backend==="live"){ const v=doc[CAMPO[k]]; return v==null?null:JSON.parse(JSON.stringify(v)) }
+  if(backend==="anteprima"){
+    try{ const r=await window.storage.get(k,true); diagSync=Date.now(); return r?JSON.parse(r.value):null }
+    catch(e){ const m=String(e&&e.message||e); if(!/not found|no such|missing/i.test(m)) diagErr="lettura: "+m; return null }
+  }
+  return locGet("c:"+k);
+};
+const scrivi=async(k,v,c)=>{
+  if(!c){ locSet(k,v); return true }
+  if(backend==="relay"){
+    doc[CAMPO[k]]=v;
+    if(k===K_GRIGLIA){
+      if(modo==="pilota"&&io&&v[io.id]) relayPubblicaPilota(v[io.id]);
+      else { griglia=v; relayPubblicaStato(true); }
+      return true;
+    }
+    if(k===K_PROP){ const ultima=(v||[])[v.length-1]; if(ultima) relayPubblica(topProp(MQ.code),ultima,false); return true; }
+    relayPubblicaStato(true);
+    return true;
+  }
+  if(backend==="cloud"){
+    doc[CAMPO[k]]=v;
+    if(k===K_GRIGLIA){
+      if(modo==="pilota"&&io&&v[io.id]) fbPilota(v[io.id]); else griglia=v;
+      return true;
+    }
+    if(k===K_CATALOGO) return fbStato({catalogo:v});
+    if(k===K_CUSTOM)   return fbStato({custom:v});
+    if(k===K_SFIDA)    return fbStato({sfida:v});
+    if(k===K_RESET)    return fbStato({reset:v});
+    return true;
+  }
+  if(backend==="live"){
+    doc[CAMPO[k]]=v;
+    if(ruolo==="host") trasmetti(); else inviaAllHost(k,v);
+    return true;
+  }
+  locSet("c:"+k,v); return true;
+};
+const cancella=async(k)=>{ locDel(k); try{ await window.storage.delete(k,false) }catch(e){} };
+
+/* salva il MIO pilota: in locale, e sul canale condiviso attivo */
+async function salva(p){
+  io=p; griglia[p.id]=p; locSet(K_LOCALE,p);
+  const g=(await leggi(K_GRIGLIA,true))||{};
+  g[p.id]=p;
+  return scrivi(K_GRIGLIA,g,true);
+}
+async function salvaCatalogo(c){ catalogo=c; return scrivi(K_CATALOGO,c,true); }
+
+async function sincronizza(){
+  if(backend==="cloud"){ diagLetto=Object.keys(griglia).length; aggiornaConta(); if(modo==="muretto") fbClassificaScrivi(); return; }
+  if(backend==="relay"){ diagLetto=Object.keys(griglia).length; aggiornaConta(); if(modo==="muretto") relayPubblicaStato(false); return; }
+  if(backend==="live"){ aggiornaConta(); }
+  const g=await leggi(K_GRIGLIA,true);
+  diagLetto=g?Object.keys(g).length:0;
+  {
+    const lim=Date.now()-20*3600e3, pulita={};
+    for(const [k,v] of Object.entries(g||{})) if((v.updated||0)>lim) pulita[k]=v;
+    if(io) pulita[io.id]=io;
+    griglia=pulita;
+  }
+  const c=await leggi(K_CATALOGO,true);
+  if(c&&c.length) catalogo=c;
+  const cu=await leggi(K_CUSTOM,true);
+  if(Array.isArray(cu)) custom=cu;
+  if(modo==="pilota"&&io) applicaReset();
+  if(modo==="muretto") disegnaMuretto();
+  else if(io){ if(tab==="torre") disegnaTorre(); if(tab==="box") ridisegnaGriglia(); aggiornaConta(); }
+}
+
+/* ── motore ──
+   Ogni unità vale 10 punti, proporzionale a millilitri e gradazione.
+   Nessuna soglia e nessun tetto; l'acqua e le soste costano 6 punti.
+   Alcolemia e bandiere restano solo come informazione a schermo. */
+function stato(p,ora=Date.now()){
+  const d=[...(p.drinks||[])].sort((a,b)=>a.t-b.t);
+  const r=p.sesso==="F"?0.55:0.68, peso=Math.max(35,+p.peso||70);
+  let g=0,primo=null,alc=0,h2o=0,valide=0,perse=0,punti=0,sforato=false,unita=0;
+  const segna=[];
+  const bacA=t=>primo===null?0:Math.max(0,g/(peso*r)-DECAD*(t-primo)/3600e3);
+  for(const x of d){
+    const gr=+x.g||0;
+    if(gr===0){h2o++;segna.push({...x,k:"h2o"});continue}
+    if(bacA(x.t)>=LIMITE) sforato=true;
+    segna.push({...x,k:"ok"});
+    if(primo===null) primo=x.t;
+    g+=gr; alc++; unita+=gr/12;
+  }
+  valide=alc;
+  const bac=bacA(ora);
+  if(bac>=LIMITE) sforato=true;
+  punti+=Math.round(unita*10);
+  punti-=h2o*6;
+  const bonus=(p.bonus||[]).reduce((a,b)=>a+(+b.punti||0),0);
+  punti+=bonus;
+  const sc=alc===0&&h2o>=1;
+  const bandiera=bac>=LIMITE?"rossa":bac>=0.2?"gialla":"verde";
+  const pen=(p.bonus||[]).filter(b=>(+b.punti||0)<0);
+  return {bac,punti,alc,h2o,unita,valide,perse,sforato,bandiera,sc,bonus,pen,drinks:segna};
+}
+
+function radio(s,nome){
+  const n=(nome||"").split(" ")[0].toUpperCase()||"PILOTA";
+  if(s.sc) return `${n}, sei la safety car. Tutta la griglia stasera ti deve un caffè.`;
+  if(s.bandiera==="rossa") return `${n}, bandiera rossa: sei oltre lo 0,50. Il ritmo è quello giusto per la classifica.`;
+  if(s.bandiera==="gialla") return `${n}, gialla in settore due. Passo solido, si può spingere.`;
+  if(s.alc===0) return `${n}, gomme fredde. La gara è lunga: il serbatoio si smaltisce a 0,15 g/L all'ora.`;
+  return `${n}, ${s.valide} unità valide e ancora sotto il limite. Passo da campionato.`;
+}
+const oraDi=t=>new Date(t).toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-digit"});
+const esc=s=>String(s).replace(/[<>&]/g,m=>({"<":"&lt;",">":"&gt;","&":"&amp;"}[m]));
+function disegnaTorreAggregata(c,righe){
+  const mioId=io?io.id:"";
+  const lead=righe[0]?righe[0].punti:0;
+  c.innerHTML=righe.map(r=>{
+    const b=r.bac>=0.5?"rossa":r.bac>=0.2?"gialla":"verde";
+    return `<div class="riga${r.id===mioId?" io":""}" data-id="${r.id}">
+      <div class="flag" style="background:${col(BANDIERE[b].c)}"></div><div class="pos">${r.p}</div>
+      <div class="mid"><div class="nome">${esc(r.nome)}</div>
+      <div class="dett">${(+r.unita).toFixed(1)} ${tr("unita")} · ${(+r.bac).toFixed(2)} g/L</div></div>
+      <div class="punti"><b>${r.punti}</b><span>${r.p>1?"−"+(lead-r.punti):""}</span></div></div>`;
+  }).join("");
+}
+const MAX_TORRE=60;   // oltre, il muretto mostra i primi e conta gli altri
+const classifica=()=>Object.values(griglia).map(p=>({p,s:stato(p)})).sort((a,b)=>b.s.punti-a.s.punti||a.s.bac-b.s.bac);
+
+function traduciScelta(){
+  const q=(sel,v)=>{const e=document.querySelector(sel); if(e) e.textContent=v};
+  q("#scelta .sotto",tr("sotto")+" · "+VERSIONE);
+  q('.post[data-m="pilota"] h3',tr("pilotaTit")); q('.post[data-m="pilota"] p',tr("pilotaDes"));
+  q('.post[data-m="muretto"] h3',tr("muroTit"));  q('.post[data-m="muretto"] p',tr("muroDes"));
+  q("#scelta .nota",tr("scelNota"));
+  q("#scelta .conn-top .eyebrow",tr("conn"));
+  const b=document.getElementById("linguaBtn"); if(b) b.textContent=lingua==="it"?"🇬🇧 English":"🇮🇹 Italiano";
+  // muretto
+  const m={mwCodice:"codice",mwN:"inGriglia",mwU:"unitaTot",mwOk:"sottoLim",mwOra:"ora"};
+  for(const [id,k] of Object.entries(m)){
+    const e=document.getElementById(id); if(e&&e.previousElementSibling) e.previousElementSibling.textContent=tr(k);
+  }
+  const lab=document.querySelectorAll("#muretto .mw-lab .eyebrow");
+  if(lab[0]) lab[0].textContent=tr("torre");
+  if(lab[2]) lab[2].textContent=tr("gps");
+  if(lab[4]) lab[4].textContent=tr("ultimi");
+  const lan=document.getElementById("mwLancia"); if(lan) lan.textContent=tr("lancia");
+  const rst=document.getElementById("mwReset"); if(rst) rst.textContent=tr("azzeraB");
+  const esc2=document.getElementById("mwEsci"); if(esc2) esc2.textContent=tr("cambiaPost");
+  const pv=document.getElementById("mwProva"); if(pv) pv.textContent=tr("provaPil");
+  const pl=document.getElementById("mwPulisci"); if(pl) pl.textContent=tr("pulisci");
+  const rp=document.querySelector("#riposo .nota"); if(rp) rp.textContent=tr("riaccendi");
+}
+
+/* ═══ GARA CON CODICE (relay) ═══ */
+async function apriRelay(){
+  const c=document.getElementById("connCorpo");
+  const code=codiceCasuale();
+  c.innerHTML=`<p>Apro la gara <b>${code}</b> sui broker pubblici…</p>`;
+  try{
+    const ok=await relayAvvia(code);
+    if(!ok) throw new Error("nessun broker ha risposto");
+    locSet(K_SESSIONE,{relay:true,code});
+    pannelloConn(); aggiornaVista();
+  }catch(e){
+    c.innerHTML=`<p style="color:var(--rossa)">${esc(e.message)}</p>
+      <button class="conn-btn primo" id="cnB5">Indietro</button>`;
+    document.getElementById("cnB5").addEventListener("click",()=>pannelloConn());
+  }
+}
+function entraRelay(){
+  const c=document.getElementById("connCorpo");
+  c.innerHTML=`<p>Inserisci il codice gara che ti ha dato il muretto.</p>
+    <input id="rlCod" placeholder="ABC12" autocomplete="off" autocapitalize="characters" spellcheck="false" style="text-transform:uppercase">
+    <button class="conn-btn primo" id="rlOk">Entra</button>
+    <button class="conn-btn" id="rlNo">Indietro</button>
+    <div id="rlMsg" style="font-size:13px;margin-top:10px"></div>`;
+  document.getElementById("rlNo").addEventListener("click",()=>pannelloConn());
+  document.getElementById("rlOk").addEventListener("click",async()=>{
+    const code=(document.getElementById("rlCod").value||"").trim().toUpperCase();
+    if(code.length<3) return;
+    document.getElementById("rlMsg").textContent="Mi collego…";
+    try{
+      const ok=await relayAvvia(code);
+      if(!ok) throw new Error("nessun broker raggiungibile");
+      locSet(K_SESSIONE,{relay:true,code});
+      pannelloConn(); aggiornaVista();
+    }catch(e){ document.getElementById("rlMsg").innerHTML=`<span style="color:var(--rossa)">${esc(e.message)}</span>`; }
+  });
+}
+
+/* ═══ PANNELLO CLOUD ═══ */
+const REGOLE=`rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /gare/{gara}/{documento=**} {
+      allow read, write: if request.time < timestamp.date(2027, 12, 31);
+    }
+  }
+}`;
+
+function linkInvito(){
+  const d=btoa(unescape(encodeURIComponent(JSON.stringify({g:FB.gara,c:FB.cfg}))));
+  return location.origin+location.pathname+"#cloud="+d;
+}
+
+/* Lettore tollerante: pesca i campi uno per uno invece di interpretare
+   tutto l'oggetto. Così regge l'appId con i due punti dentro, le virgole
+   finali, i commenti, le graffe mancanti e l'intero blocco con gli import. */
+function leggiConfig(testo){
+  if(!testo) return null;
+  const campo=n=>{
+    const m=String(testo).match(new RegExp("[\"']?"+n+"[\"']?\\s*:\\s*[\"']([^\"']+)[\"']"));
+    return m?m[1]:undefined;
+  };
+  const cfg={};
+  ["apiKey","authDomain","projectId","storageBucket","messagingSenderId","appId","measurementId","databaseURL"]
+    .forEach(n=>{ const v=campo(n); if(v) cfg[n]=v; });
+  if(!cfg.apiKey||!cfg.projectId) return null;
+  if(!cfg.authDomain) cfg.authDomain=cfg.projectId+".firebaseapp.com";
+  if(!cfg.storageBucket) cfg.storageBucket=cfg.projectId+".appspot.com";
+  return cfg;
+}
+
+function pannelloCloud(){
+  const c=document.getElementById("connCorpo");
+  const salvata=locGet("varano:cloudcfg");
+  c.innerHTML=`<p style="font-size:13px"><b>Lo fai solo tu, una volta.</b> Su
+    <b>console.firebase.google.com</b>: crea progetto → Build → Firestore Database → Crea database →
+    <b>modalità produzione</b>, regione europea. Poi Impostazioni progetto → Le tue app → icona web
+    <code>&lt;/&gt;</code> → copia e incolla qui <b>tutto il blocco</b> che ti mostra, imports compresi: ci penso io a estrarre quello che serve.</p>
+    <textarea id="clCfg" rows="5" style="width:100%;background:var(--asfalto);border:1px solid var(--linea);border-radius:11px;padding:11px;color:var(--testo);font-family:var(--mono);font-size:12px;outline:none" placeholder='Incolla qui tutto il blocco di codice della console Firebase'>${salvata?esc(JSON.stringify(salvata)):""}</textarea>
+    <label class="campo" style="margin-top:10px"><span class="eyebrow">Nome della gara</span>
+      <input id="clGara" value="varano-${new Date().toISOString().slice(0,10)}" autocomplete="off"></label>
+    <p style="font-size:12.5px;margin-top:12px;color:var(--testo-2)">Nella scheda <b>Regole</b> di
+    Firestore incolla queste, altrimenti in modalità produzione blocca tutto:</p>
+    <textarea id="clRul" rows="7" readonly style="width:100%;background:var(--asfalto);border:1px solid var(--linea);border-radius:11px;padding:11px;color:var(--testo-2);font-family:var(--mono);font-size:11px;outline:none">${esc(REGOLE)}</textarea>
+    <button class="conn-btn" id="clCopiaR" style="margin-top:8px">Copia le regole</button>
+    <button class="conn-btn primo" id="clGo">Apri la gara</button>
+    <button class="conn-btn" id="clBack">Indietro</button>
+    <div id="clMsg" style="font-size:13px;margin-top:10px;line-height:1.5"></div>`;
+  const q=i=>document.getElementById(i);
+  q("clBack").addEventListener("click",()=>pannelloConn());
+  q("clCopiaR").addEventListener("click",async()=>{
+    try{ await navigator.clipboard.writeText(REGOLE); alert("Regole copiate.") }catch(e){ q("clRul").select() }
+  });
+  q("clGo").addEventListener("click",async()=>{
+    const cfg=leggiConfig(q("clCfg").value);
+    if(!cfg){ q("clMsg").innerHTML=`<span style="color:var(--rossa)">Non trovo apiKey e projectId nel testo incollato. Copia pure tutto il blocco che ti mostra Firebase, imports compresi.</span>`; return; }
+    const gara=(q("clGara").value||"gara").trim().replace(/[^a-zA-Z0-9_-]/g,"-");
+    q("clMsg").textContent="Mi collego…";
+    try{
+      locSet("varano:cloudcfg",cfg);
+      await fbConnetti(cfg,gara);
+      locSet(K_SESSIONE,{cloud:true,gara,cfg});
+      pannelloConn(); aggiornaVista();
+    }catch(e){ q("clMsg").innerHTML=`<span style="color:var(--rossa)">${esc(e.message)}</span>`; }
+  });
+}
+
+async function pannelloCollaudo(){
+  apriSheet(`<h3>Collaudo del canale</h3>
+    <p class="nota" style="margin-top:2px">Scrivo, rileggo, ascolto in push e conto la griglia. Serve a
+    sapere prima della serata se regge davvero.</p>
+    <div id="cvLista" style="font-size:14px;line-height:1.9">Provo…</div>
+    <button class="sheet-btn dopo" id="cvNo">Chiudi</button>`);
+  document.getElementById("cvNo").addEventListener("click",chiudiSheet);
+  const esiti=await fbCollaudo();
+  const el=document.getElementById("cvLista");
+  if(el) el.innerHTML=esiti.map(e=>`<div style="display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid var(--linea);padding:5px 0">
+    <span style="color:${e.ok?"var(--verde)":"var(--rossa)"}">${e.ok?"✓":"✕"} ${esc(e.n)}</span>
+    <span style="font-family:var(--mono);font-size:12px;color:var(--testo-3)">${esc(e.d)}</span></div>`).join("")
+    +`<p class="nota">Consumo finora: ${FB.letture} letture, ${FB.scritture} scritture. Il piano gratuito
+      dà 50.000 e 20.000 al giorno.</p>`;
+}
+
+/* ═══ CONNESSIONE ═══ */
+function statoConn(){
+  const e=document.getElementById("connStato"); if(!e) return;
+  if(backend==="relay") e.innerHTML=`<span style="color:var(--verde)">gara ${esc(NET.id||"")} · ${MQ.vivi} broker</span>`;
+  else if(backend==="cloud") e.innerHTML=`<span style="color:var(--verde)">cloud ${esc(FB.gara||"")} · ${FB.letture}L ${FB.scritture}S</span>`;
+  else if(backend==="live") e.innerHTML=`<span style="color:var(--verde)">diretto ${esc(NET.id||"")}</span>`;
+  else if(backend==="anteprima") e.innerHTML=`<span style="color:var(--gialla)">solo anteprima chat</span>`;
+  else e.innerHTML=`<span style="color:var(--rossa)">non collegato</span>`;
+}
+function pannelloConn(){
+  const c=document.getElementById("connCorpo"); if(!c) return;
+  statoConn();
+  clearTimeout(pannelloConn._t);
+  if(backend==="relay") pannelloConn._t=setTimeout(()=>{ if(backend==="relay") statoConn() },3000);
+  if(backend==="cloud"){
+    c.innerHTML=`<p>Gara cloud <b>${esc(FB.gara)}</b> attiva${modo==="muretto"?" — sei la direzione gara":""}.</p>
+      <p style="font-size:13px">Manda questo link ai partecipanti: chi lo apre entra e basta, senza
+      account e senza configurare niente.</p>
+      <div class="codice" style="font-size:12px">${esc(linkInvito().slice(0,64))}…</div>
+      <div style="margin-top:12px">
+        <button class="conn-btn primo" id="clLink">Copia il link d'invito</button>
+        <button class="conn-btn" id="clTest">Collauda</button>
+        <button class="conn-btn" id="clEsci">Scollega</button></div>
+      <p style="font-size:12.5px;margin-top:10px;color:var(--testo-3)">Consumo: ${FB.letture} letture,
+      ${FB.scritture} scritture su 50.000 / 20.000 al giorno.</p>`;
+    document.getElementById("clLink").addEventListener("click",async()=>{
+      const l=linkInvito();
+      try{ await navigator.clipboard.writeText(l); alert("Link copiato.") }catch(e){ prompt("Link d'invito:",l) }
+    });
+    document.getElementById("clTest").addEventListener("click",pannelloCollaudo);
+    document.getElementById("clEsci").addEventListener("click",async()=>{
+      fbChiudi(); await cancella(K_SESSIONE); backend="locale"; pannelloConn();
+    });
+    return;
+  }
+  if(backend==="relay"){
+    c.innerHTML=`<p>Gara aperta${modo==="muretto"?" — sei la direzione gara":""}. Codice da dettare:</p>
+      <div class="codice" style="font-size:34px;letter-spacing:.18em">${esc(NET.id)}</div>
+      <p style="font-size:13px;margin-top:10px">Collegamento via relay pubblico · ${MQ.vivi} broker attivi.</p>
+      <div style="margin-top:8px">
+        <button class="conn-btn primo" id="cnCopiaR">Copia il codice</button>
+        <button class="conn-btn" id="cnEsciR">Scollega</button></div>`;
+    document.getElementById("cnCopiaR").addEventListener("click",async()=>{
+      try{ await navigator.clipboard.writeText(NET.id); alert("Codice copiato.") }catch(e){ prompt("Codice gara:",NET.id) }
+    });
+    document.getElementById("cnEsciR").addEventListener("click",async()=>{
+      relayChiudi(); await cancella(K_SESSIONE); backend="locale"; pannelloConn();
+    });
+    return;
+  }
+  if(backend==="live"){
+    c.innerHTML=`<p>Collegamento live ${ruolo==="host"?"— questo dispositivo è l'host, deve restare acceso e sulla pagina":"all'host"}. Codice gara:</p>
+      <div class="codice">${esc(NET.id)}</div>
+      <div style="margin-top:12px">
+        <button class="conn-btn" id="cnCopia">Copia codice</button>
+        <button class="conn-btn" id="cnEsci">Scollega</button></div>
+      <p style="margin-top:12px;font-size:13px">${ruolo==="host"?`Collegati: ${conns.length}`:"Ricevi gli aggiornamenti in tempo reale."}</p>`;
+    document.getElementById("cnCopia").addEventListener("click",async()=>{
+      try{ await navigator.clipboard.writeText(NET.id) ; alert("Codice copiato.") }catch(e){ prompt("Codice gara:",NET.id) }
+    });
+    document.getElementById("cnEsci").addEventListener("click",async()=>{
+      try{ if(peer) peer.destroy() }catch(e){}
+      peer=null;conns=[];hostConn=null;ruolo=null;NET.id=null;
+      await cancella(K_SESSIONE); backend=window.storage?"anteprima":"locale"; pannelloConn();
+    });
+    return;
+  }
+  c.innerHTML=`<p>Il muretto apre la gara e detta il codice a voce. Gli altri lo scrivono e sono dentro.
+    Nessun account, nessuna chiave, nessuna configurazione: ognuno con il proprio telefono e la propria
+    linea dati, anche su operatori diversi. Lo stato resta sui broker, quindi chi entra dopo o si
+    ricollega ritrova tutto.</p>
+    <button class="conn-btn primo" id="cnRelay">Apri gara — sono il muretto</button>
+    <button class="conn-btn primo" id="cnEntraRelay">Entra con il codice</button>
+    <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--linea)">
+      <span class="eyebrow">Alternative</span><br>
+      <button class="conn-btn" id="cnCloud" style="margin-top:8px">Gara cloud — account solo tuo</button>
+      <button class="conn-btn" id="cnCreaLive">Diretto (stessa rete WiFi)</button>
+      <button class="conn-btn" id="cnSolo">Solo questo dispositivo</button>
+      <button class="conn-btn" id="cnAzzeraConn">Dimentica il collegamento salvato</button>
+    </div>`;
+  document.getElementById("cnRelay").addEventListener("click",apriRelay);
+  document.getElementById("cnEntraRelay").addEventListener("click",()=>entraRelay());
+  document.getElementById("cnCloud").addEventListener("click",pannelloCloud);
+  document.getElementById("cnCreaLive").addEventListener("click",creaLive);
+  document.getElementById("cnAzzeraConn").addEventListener("click",async()=>{
+    relayChiudi(); try{ if(peer) peer.destroy() }catch(e){}
+    peer=null; conns=[]; hostConn=null; ruolo=null; NET.id=null; backend="locale";
+    await cancella(K_SESSIONE); locDel("varano:fbcfg");
+    pannelloConn(); toast("Collegamento dimenticato","✓");
+  });
+  document.getElementById("cnSolo").addEventListener("click",()=>{document.getElementById("connCorpo").innerHTML=`<p>Va bene: nessuna sincronia. Scegli la postazione qui sopra.</p>`});
+}
+
+async function creaLive(){
+  const c=document.getElementById("connCorpo");
+  c.innerHTML=`<p>Apro il collegamento diretto…</p>`;
+  try{
+    const cod=await ospitaLive();
+    doc={griglia:doc.griglia||{},catalogo:doc.catalogo||CATALOGO_BASE,sfida:doc.sfida||null,custom:doc.custom||[],reset:0};
+    locSet(K_SESSIONE,{live:true,id:cod});
+    pannelloConn();
+  }catch(e){
+    c.innerHTML=`<p style="color:var(--rossa)">Non riesco ad aprirlo: ${esc(e.message)}</p>
+      <button class="conn-btn primo" id="cnBack4">Indietro</button>`;
+    document.getElementById("cnBack4").addEventListener("click",()=>pannelloConn());
+  }
+}
+
+let ultimaAttivita=Date.now();
+function sveglia(){ ultimaAttivita=Date.now(); }
+
+
+/* ── postazione ── */
+document.querySelectorAll(".post").forEach(b=>b.addEventListener("click",()=>entra(b.dataset.m)));
+document.getElementById("linguaBtn").addEventListener("click",cambiaLingua);
+document.getElementById("mwEsci").addEventListener("click",tornaAScelta);
+async function entra(m){
+  if(m==="muretto" && locGet("varano:muretto:ok")!==true){
+    const ok=await chiediPassword();
+    if(!ok) return;
+    locSet("varano:muretto:ok",true);
+  }
+  modo=m; sbloccaAudio();
+  if(m==="muretto") scrivi(K_MODO,m,false);   // il pilota la salva a iscrizione fatta
+  document.getElementById("scelta").style.display="none";
+  if(m==="muretto"){
+    document.getElementById("muretto").classList.add("on");
+    document.body.style.overflow="hidden"; avviaMuretto();
+  }else{
+    document.getElementById("fisso").style.display="block";
+    io=await leggi(K_LOCALE,false);
+    if(!io) vistaIscrizione(); else {griglia[io.id]=io; vistaApp(); vaiA("box");}
+  }
+  await sincronizza();
+  await ciclaSfide();
+}
+
+function chiediPassword(){
+  return new Promise(ris=>{
+    apriSheet(`<h3>${lingua==="en"?"Pit wall access":"Accesso al muretto"}</h3>
+      <p class="nota" style="margin-top:2px">${lingua==="en"
+        ?"The pit wall runs race control: it approves and launches challenges."
+        :"Il muretto è la direzione gara: approva e lancia le sfide."}</p>
+      <label class="campo"><span class="eyebrow">Password</span>
+        <input id="pwIn" type="password" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+      <div id="pwErr" style="display:none;color:var(--rossa);font-size:13px;margin-top:8px">${lingua==="en"?"Wrong password.":"Password errata."}</div>
+      <button class="sheet-btn primo" id="pwOk">${lingua==="en"?"Enter":"Entra"}</button>
+      <button class="sheet-btn dopo" id="pwNo">${lingua==="en"?"Cancel":"Annulla"}</button>`);
+    const inp=document.getElementById("pwIn");
+    setTimeout(()=>inp&&inp.focus(),120);
+    const prova=()=>{
+      if(inp.value.trim().toLowerCase()===PWD_MURETTO){ chiudiSheet(); ris(true); }
+      else { document.getElementById("pwErr").style.display="block"; inp.value=""; inp.focus(); }
+    };
+    document.getElementById("pwOk").addEventListener("click",prova);
+    inp.addEventListener("keydown",e=>{ if(e.key==="Enter") prova(); });
+    document.getElementById("pwNo").addEventListener("click",()=>{ chiudiSheet(); ris(false); });
+  });
+}
+
+/* ══ TELEFONO ══ */
+const app=document.getElementById("app");
+
+function vistaIscrizione(){
+  document.getElementById("fisso").style.paddingBottom="0";
+  app.innerHTML=`<div id="iscrizione">
+    <button class="indietro" id="indietroBtn">${tr("indietro")}</button>
+    <div class="marchio">BOX <em>BOX</em> BOX</div><div class="sotto">${tr("iscrizioni")}</div>
+    <p class="nota">${tr("iscrNota")}</p>
+    <label class="campo"><span class="eyebrow">${tr("nome")}</span><input id="fNome" maxlength="18" autocomplete="off"></label>
+    <label class="campo"><span class="eyebrow">${tr("peso")}</span><input id="fPeso" inputmode="numeric" maxlength="3" placeholder="72"></label>
+    <div class="campo"><span class="eyebrow">${tr("metab")}</span><div class="coppia"><button data-s="M" class="on">${tr("uomo")}</button><button data-s="F">${tr("donna")}</button></div></div>
+    <button id="viaBtn" disabled>${tr("entra")}</button></div>`;
+  document.getElementById("indietroBtn").addEventListener("click",tornaAScelta);
+  let sesso="M";
+  const nome=document.getElementById("fNome"),peso=document.getElementById("fPeso"),via=document.getElementById("viaBtn");
+  const ck=()=>via.disabled=!(nome.value.trim().length>1&&+peso.value>=35);
+  nome.addEventListener("input",ck);
+  peso.addEventListener("input",()=>{peso.value=peso.value.replace(/\D/g,"");ck()});
+  app.querySelectorAll(".coppia button").forEach(b=>b.addEventListener("click",()=>{
+    sesso=b.dataset.s; app.querySelectorAll(".coppia button").forEach(x=>x.classList.toggle("on",x===b));
+  }));
+  via.addEventListener("click",async()=>{
+    await salva({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),
+      nome:nome.value.trim(),peso:+peso.value,sesso,drinks:[],bonus:[],gps:null,
+      nato:Date.now(),updated:Date.now()});
+    scrivi(K_MODO,"pilota",false);
+    if(backend==="relay"&&MQ.code){
+      MQ.clients.forEach(c=>{ try{ c.subscribe(topDm(MQ.code,io.id)) }catch(e){} });
+      relayPubblicaPilota(io);
+    }
+    vistaApp(); vaiA("box");
+  });
+}
+
+async function tornaAScelta(){
+  await cancella(K_MODO);
+  modo=null;
+  document.getElementById("fisso").style.display="none";
+  document.getElementById("muretto").classList.remove("on");
+  document.body.style.overflow="";
+  document.getElementById("scelta").style.display="";
+  window.scrollTo({top:0});
+  pannelloConn();
+}
+
+function vistaApp(){
+  document.getElementById("fisso").style.paddingBottom="calc(76px + env(safe-area-inset-bottom))";
+  app.innerHTML=`<header><div id="banda"></div><div class="testata">
+    <div><div class="marchio">BOX <em>BOX</em> BOX</div><div class="sotto">${tr("sotto")}</div></div>
+    <div class="destra"><button class="audio" id="riposoBtn">${tr("tavolo")}</button><button class="audio" id="audioBtn">🔊</button>
+    <div class="conta"><div class="eyebrow">${tr("inGriglia")}</div><b id="nPiloti">1</b></div></div></div></header>
+    <div id="sfidaBox"></div>
+    <main id="corpo"></main>
+    <nav><button data-t="box" class="on">${tr("tabBox")}</button><button data-t="torre">${tr("tabTorre")}</button><button data-t="regole">${tr("tabReg")}</button></nav>`;
+  document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>vaiA(b.dataset.t)));
+  document.getElementById("riposoBtn").addEventListener("click",entraRiposo);
+  const ab=document.getElementById("audioBtn");
+  ab.addEventListener("click",()=>{
+    muto=!muto; ab.classList.toggle("spento",muto);
+    ab.textContent=muto?"🔇":"🔊";
+    if(!muto){ sbloccaAudio(); suona("ok"); }
+  });
+}
+
+function vaiA(t){
+  tab=t; document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));
+  const c=document.getElementById("corpo"); window.scrollTo({top:0});
+  if(t==="box"){c.innerHTML=htmlBox();legaBox();disegnaBox()}
+  if(t==="torre"){c.innerHTML=`<div class="eyebrow" style="margin-bottom:10px">${tr("classLive")}</div><div id="torre"></div>`;disegnaTorre()}
+  if(t==="regole"){
+    c.innerHTML=htmlRegole();
+    document.getElementById("esciBtn").addEventListener("click",cambiaPilota);
+    document.getElementById("postBtn").addEventListener("click",tornaAScelta);
+  }
+}
+
+function htmlBox(){
+  return `<div class="gruppo">
+    <section class="scheda hero">
+      <div class="eyebrow">${tr("alcolemia")}</div>
+      <div class="hero-riga"><div id="bac">0.00</div>
+        <div class="hero-lato"><div class="eyebrow">${tr("puntiUn")}</div>
+        <div class="v"><span id="pPunti">0</span> <span style="color:var(--testo-3)">·</span> <span id="pUnita" style="color:var(--testo-2)">0</span></div></div></div>
+      <div class="gauge"><div id="gaugeFill"></div><div class="limite"></div></div>
+      <div class="gauge-lab"><span class="eyebrow">0,00 g/L</span><span class="eyebrow">${tr("limite")}</span><span class="eyebrow">1,00</span></div>
+      <div class="stato-riga"><span class="pallino" id="pallino"></span><span id="statoTesto"></span></div>
+    </section>
+    <section class="scheda radio"><div class="eyebrow">${tr("radioBox")}</div><div id="radioTesto"></div></section>
+    <div class="sezione" style="margin-top:14px">
+      <button class="mini" id="modPilota" style="width:100%;padding:11px">${tr("correggi")}</button>
+    </div>
+    <section class="scheda gps">
+      <div class="txt"><div class="eyebrow">${tr("posizione")}</div>
+      <div id="gpsStato">${tr("gpsOff")}</div>
+      <button class="audio" id="gpsAgg" style="display:none;margin-top:9px">${tr("gpsAgg")}</button></div>
+      <button class="switch" id="gpsSw"><i></i></button>
+    </section>
+    <div class="sezione">
+      <div class="sez-top"><span class="eyebrow">${tr("registra")}</span><button class="mini" id="modBtn">${tr("modifica")}</button></div>
+      <div class="griglia" id="grigliaDrink"></div>
+      <button id="acquaBtn">${tr("acquaBtn")}</button>
+      <button id="annullaBtn">${tr("annulla")}</button>
+    </div>
+    <div class="sezione">
+      <div class="sez-top"><span class="eyebrow">${tr("sfideGruppo")}</span><button class="mini" id="nuovaSfida">${tr("scrivine")}</button></div>
+      <div id="listaCustom"></div>
+    </div>
+    <div class="sezione" id="nastroSez" style="display:none">
+      <div class="eyebrow" id="nastroLab">${tr("nastro")}</div>
+      <div class="nastro-wrap"><div class="nastro" id="nastro"><div class="base"></div></div></div>
+    </div></div>`;
+}
+
+function legaBox(){
+  ridisegnaGriglia();
+  document.getElementById("acquaBtn").addEventListener("click",()=>registra("acqua"));
+  document.getElementById("annullaBtn").addEventListener("click",annulla);
+  const mb=document.getElementById("modBtn");
+  mb.addEventListener("click",()=>{
+    modifica=!modifica; mb.classList.toggle("on",modifica);
+    document.body.classList.toggle("modifica",modifica);
+    mb.textContent=modifica?tr("fatto"):tr("modifica");
+  });
+  document.getElementById("modPilota").addEventListener("click",editorPilota);
+  document.getElementById("nuovaSfida").addEventListener("click",()=>editorSfida(null));
+  ridisegnaCustom();
+  const sw=document.getElementById("gpsSw");
+  sw.addEventListener("click",()=>gpsId?spegniGps():accendiGps());
+  document.getElementById("gpsAgg").addEventListener("click",()=>chiediPosizione(false));
+  if(gpsId){ sw.classList.add("on"); mostraAgg(true);
+    const st=document.getElementById("gpsStato");
+    if(io.gps) st.textContent=`Condivisa · precisione ${Math.round(io.gps.acc)} m · rilevata ${oraDi(io.gps.t)}`; }
+}
+
+function ridisegnaGriglia(){
+  const g=document.getElementById("grigliaDrink"); if(!g) return;
+  g.innerHTML=catalogo.map(b=>{
+    const u=(grammiDi(b.ml,b.abv)/12).toFixed(1);
+    return `<button class="drink" data-b="${b.id}"><span class="u">${u}u</span>
+      <div class="ico">${b.ico||"🥤"}</div><div class="n">${esc(b.nome)}</div>
+      <div class="s">${b.ml} ml · ${b.abv}%</div></button>`;
+  }).join("")+`<button class="drink nuova" id="nuovaBtn">${tr("aggiungi")}</button>`;
+  g.querySelectorAll(".drink[data-b]").forEach(el=>el.addEventListener("click",()=>{
+    const b=catalogo.find(x=>x.id===el.dataset.b); if(!b) return;
+    if(modifica){editor(b);return}
+    el.classList.add("lampo"); setTimeout(()=>el.classList.remove("lampo"),400);
+    registra(b.id);
+  }));
+  document.getElementById("nuovaBtn").addEventListener("click",()=>editor(null));
+}
+
+async function registra(id){
+  const b=id==="acqua"?{nome:"Acqua",ml:0,abv:0}:catalogo.find(x=>x.id===id);
+  if(!b) return;
+  const g=id==="acqua"?0:grammiDi(b.ml,b.abv);
+  const prima=stato(io).punti;
+  await salva({...io,drinks:[...(io.drinks||[]),{t:Date.now(),tipo:id,nome:b.nome,g}],updated:Date.now()});
+  const d=stato(io).punti-prima;
+  toast(b.nome+" registrata",(d>=0?"+":"")+d);
+  disegnaBox(); aggiornaVista(); if(typeof sveglia==="function") sveglia();
+  if(sfida) valuta(sfida);
+}
+async function annulla(){
+  const d=[...(io.drinks||[])].sort((a,b)=>a.t-b.t); if(!d.length) return;
+  const via=d.pop(); await salva({...io,drinks:d,updated:Date.now()});
+  toast((via.nome||"Pit stop")+" annullata","↩"); nTacche=0; disegnaBox();
+}
+
+function disegnaBox(){
+  if(tab!=="box"||!document.getElementById("bac")) return;
+  const s=stato(io), b=BANDIERE[s.bandiera], c=col(b.c), el=id=>document.getElementById(id);
+  el("bac").textContent=s.bac.toFixed(2); el("bac").style.color=c;
+  el("banda").style.background=c; el("pallino").style.background=c;
+  el("gaugeFill").style.width=Math.min(100,s.bac*100)+"%"; el("gaugeFill").style.background=c;
+  el("statoTesto").textContent=b.nome+" · "+b.testo; el("statoTesto").style.color=c;
+  el("pPunti").textContent=s.punti;
+  el("pUnita").textContent=s.unita.toFixed(1)+" "+tr("unita")+".";
+  el("radioTesto").textContent=radio(s,io.nome);
+  el("annullaBtn").style.display=s.drinks.length?"block":"none";
+  disegnaNastro(s);
+}
+
+function disegnaNastro(s){
+  const sez=document.getElementById("nastroSez");
+  if(!s.drinks.length){sez.style.display="none";nTacche=0;document.getElementById("nastro").innerHTML='<div class="base"></div>';return}
+  sez.style.display="block";
+  document.getElementById("nastroLab").textContent=`Nastro stint · dalle ${oraDi(s.drinks[0].t)} a ora`;
+  const n=document.getElementById("nastro"), inizio=s.drinks[0].t, durata=Math.max(Date.now()-inizio,45*60000);
+  if(s.drinks.length===nTacche){
+    n.querySelectorAll(".tacca").forEach((e,i)=>e.style.left=((s.drinks[i].t-inizio)/durata*100)+"%");
+    return;
+  }
+  n.innerHTML='<div class="base"></div>';
+  s.drinks.forEach(x=>{
+    const d=document.createElement("div");
+    d.className="tacca"+(x.k==="h2o"?" h2o":"");
+    d.style.left=((x.t-inizio)/durata*100)+"%";
+    d.innerHTML=`<i></i><b>${oraDi(x.t)}</b>`;
+    n.appendChild(d);
+  });
+  const t=document.createElement("div"); t.className="testina"; t.style.left="100%"; n.appendChild(t);
+  nTacche=s.drinks.length;
+}
+
+async function disegnaTorre(){
+  const c=document.getElementById("torre"); if(!c) return;
+  if(backend==="relay"&&modo==="pilota"&&(doc.classifica||[]).length){ disegnaTorreAggregata(c,doc.classifica); return; }
+  if(backend==="cloud"&&modo==="pilota"){
+    const agg=await fbClassificaLeggi();
+    if(agg&&agg.length){ disegnaTorreAggregata(c,agg); return; }
+  }
+  const righe=classifica();
+  if(!righe.length){c.innerHTML=`<div class="vuoto"><b>${tr("grigliaVuota")}</b>${tr("grigliaVuotaDes")}</div>`;return}
+  const prima=new Map(); c.querySelectorAll(".riga").forEach(e=>prima.set(e.dataset.id,e.getBoundingClientRect().top));
+  const lead=righe[0].s.punti;
+  c.innerHTML=righe.map((r,i)=>`<div class="riga${io&&r.p.id===io.id?" io":""}" data-id="${r.p.id}">
+    <div class="flag" style="background:${col(BANDIERE[r.s.bandiera].c)}"></div><div class="pos">${i+1}</div>
+    <div class="mid"><div class="nome">${esc(r.p.nome)}${r.s.sc?'<span class="tag">Safety car</span>':""}</div>
+    <div class="dett">${r.s.unita.toFixed(1)} ${tr("unita")} · ${r.s.alc} ${tr("bicchieri")} · ${r.s.h2o} ${tr("acque")} · ${r.s.bac.toFixed(2)} g/L</div></div>
+    <div class="punti"><b>${r.s.punti}</b><span>${i>0?"−"+(lead-r.s.punti):""}</span></div></div>`).join("");
+  if(typeof matchMedia==="function"&&matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  c.querySelectorAll(".riga").forEach(e=>{
+    const p=prima.get(e.dataset.id); if(p===undefined) return;
+    const d=p-e.getBoundingClientRect().top; if(!d) return;
+    e.animate([{transform:`translateY(${d}px)`},{transform:"none"}],{duration:340,easing:"cubic-bezier(.77,0,.175,1)"});
+  });
+}
+
+function htmlRegole(){
+  const r=(p,t,cl)=>`<div class="rg"><span>${t}</span><b class="${cl}">${p}</b></div>`;
+  return `<div class="foglio">
+    <h2>Verifiche tecniche · Varano</h2><h1>Regolamento<br>sportivo</h1>
+    <div class="art">Art. 1 — Classifica</div>
+    ${r("+10","Ogni unità bevuta — un'unità sono 12 g di alcol puro","pos")}
+    ${r("−6","Ogni bicchiere d'acqua: fermarsi costa","neg")}
+    <p>Nessuna soglia, nessun tetto, niente unità annullate: il punteggio è proporzionale a millilitri e
+    gradazione, quindi un boccale pesa più di una media e uno shot pesa quanto un calice. Chi beve di più
+    sta davanti.</p>
+    <p>L'alcolemia stimata e le bandiere restano a schermo come informazione: non tolgono punti, non
+    bloccano niente, non esistono soste forzate né esclusioni.</p>
+    <div class="art">Art. 2 — Bandiere</div>
+    ${Object.entries(BANDIERE).map(([k,b])=>`<div class="rg"><span><span style="display:inline-block;width:9px;height:9px;border-radius:2px;background:${col(b.c)};margin-right:8px;border:1px solid rgba(0,0,0,.25)"></span>${b.nome}</span><b style="font-size:12px;color:#6c6153">${b.testo}</b></div>`).join("")}
+    <div class="art">Art. 3 — Sfide a sorpresa</div>
+    ${r("+10","Giro veloce: 5 minuti, il tuo prossimo pit stop vale doppio","pos")}
+    ${r("+30","Duello: due piloti sorteggiati, testa a testa al semaforo","pos")}
+    ${r("+25","Semaforo: cinque luci rosse, tocca appena si spengono","pos")}
+    ${r("+25","Direzione gara / domanda di griglia: 90 secondi per rispondere","pos")}
+    ${r("+20","Convocazione: sessanta secondi per difenderti dall'accusa del tavolo","pos")}
+    ${r("+15","Pit stop challenge: prova di abilità, si dichiara sull'onore","pos")}
+    ${r("±","Scommessa: punti i tuoi punti, raddoppi o li lasci","pos")}
+    ${r("−15","Sabotaggio: li togli a un avversario, ma cinque li paghi tu","neg")}
+    ${r("−10","Regime speciale: regola in vigore 12 minuti, chi sbaglia si autodenuncia","neg")}
+    <p>Partono da sole ogni 7–15 minuti, con sirena e vibrazione su tutti i telefoni insieme e il
+    countdown gigante sul muretto, che può anche lanciarle a mano. Chi si iscrive a sfida già partita
+    salta il turno.</p>
+    <p><b>Le vostre pesano quanto le mie.</b> Dalla scheda del pilota scrivete le sfide che volete —
+    testo, durata, punti e penalità — ed entrano nella rotazione a sorpresa come tutte le altre. Regole
+    e limiti li decide il tavolo, l'app tiene solo il cronometro e il conto.</p>
+    <div class="art">Art. 4 — Collegamento</div>
+    <p>Il <b>codice gara</b> passa da quattro broker pubblici in parallelo, su WebSocket sicuro: nessun
+    account e nessuna chiave, funziona con ognuno sulla propria linea dati anche fra operatori diversi.
+    Gli aggiornamenti arrivano in push, non c'è nessuna interrogazione periodica.</p>
+    <p>Ogni pilota tiene un proprio canale conservato dal broker, quindi chi entra a metà serata o
+    ricollega il muretto ritrova classifica, consumazioni e posizioni senza chiedere niente a nessuno.
+    Il <b>collegamento diretto</b> resta come opzione per quando siete tutti sulla stessa WiFi.</p>
+    <div class="art">Art. 5 — Bevande</div>
+    <p>Il catalogo è condiviso: chiunque può cambiare millilitri e gradazione o aggiungere una bevanda, e
+    la vedono tutti. Un'unità = 12 g di alcol puro. Le bevute già registrate tengono i grammi che avevano
+    al momento del pit, così le modifiche non riscrivono la storia.</p>
+    <div class="art">Art. 6 — Lettura piccola</div>
+    <p>L'alcolemia qui dentro è una stima Widmark su peso e metabolismo: non è un etilometro, non sa cosa
+    hai mangiato né come sei fatto tu, e non vale come prova di niente. Se hai bevuto non guidi, anche se
+    il numero sullo schermo è basso: guida chi non ha bevuto, quello che qui sta primo d'ufficio.</p>
+    <div class="timbro">Se qualcuno non risponde, non sta in piedi o vomita dormendo,<br>si chiama il 112. Nessun punteggio vale una nottata così.</div>
+    <div class="art">Art. 7 — Pilota iscritto</div>
+    <div class="rg"><span>${esc(io.nome)}</span><b>${io.peso} kg · ${io.sesso==="F"?"donna":"uomo"}</b></div>
+  </div><button id="esciBtn">${tr("cambiaPil")}</button>
+  <button id="postBtn" style="width:100%;margin-top:8px;padding:13px;border-radius:12px;border:1px solid var(--linea);color:var(--testo-3);font-family:var(--cond);font-size:12px;letter-spacing:.16em;text-transform:uppercase">${tr("cambiaPost")}</button>`;
+}
+async function cambiaPilota(){
+  spegniGps();
+  await cancella(K_MODO);
+  await cancella(K_LOCALE);
+  io=null; vistaIscrizione();
+}
+
+/* ── editor bevande condiviso ── */
+function editor(b){
+  const nuovo=!b, base=b||{nome:"",ico:"🥤",ml:330,abv:5};
+  apriSheet(`<h3>${nuovo?"Nuova bevanda":"Modifica "+esc(base.nome)}</h3>
+    <p class="nota" style="margin-top:2px">Il catalogo è condiviso: la vedranno tutti i piloti.</p>
+    <label class="campo"><span class="eyebrow">Nome</span><input id="eN" maxlength="16" value="${esc(base.nome)}" placeholder="Negroni"></label>
+    <div class="riga2">
+      <label class="campo"><span class="eyebrow">Emoji</span><input id="eI" maxlength="2" value="${base.ico||""}"></label>
+      <label class="campo"><span class="eyebrow">Millilitri</span><input id="eM" inputmode="numeric" value="${base.ml}"></label>
+      <label class="campo"><span class="eyebrow">Gradazione %</span><input id="eA" inputmode="decimal" value="${base.abv}"></label>
+    </div>
+    <div class="anteprima"><span class="eyebrow">Alcol per bicchiere</span><b id="eP">—</b></div>
+    <button class="sheet-btn primo" id="eOk">${nuovo?"Aggiungi al catalogo":"Salva"}</button>
+    ${nuovo?"":`<button class="sheet-btn rosso" id="eDel">Elimina dal catalogo</button>`}
+    <button class="sheet-btn dopo" id="eNo">Annulla</button>`);
+  const N=document.getElementById("eN"),I=document.getElementById("eI"),M=document.getElementById("eM"),
+        A=document.getElementById("eA"),P=document.getElementById("eP"),OK=document.getElementById("eOk");
+  const calc=()=>{
+    const g=grammiDi(+M.value||0,parseFloat(String(A.value).replace(",","."))||0);
+    P.textContent=`${g.toFixed(1)} g · ${(g/12).toFixed(1)} unità`;
+    OK.disabled=!(N.value.trim()&&+M.value>0);
+  };
+  [N,M,A].forEach(x=>x.addEventListener("input",calc)); calc();
+  document.getElementById("eNo").addEventListener("click",chiudiSheet);
+  OK.addEventListener("click",async()=>{
+    const v={id:nuovo?"c"+Date.now().toString(36):base.id,nome:N.value.trim(),ico:I.value.trim()||"🥤",
+      ml:+M.value,abv:parseFloat(String(A.value).replace(",","."))||0};
+    const fresco=(await leggi(K_CATALOGO,true))||catalogo;
+    const c=[...fresco], i=c.findIndex(x=>x.id===v.id);
+    if(i>=0) c[i]=v; else c.push(v);
+    await salvaCatalogo(c); chiudiSheet(); ridisegnaGriglia();
+    toast(nuovo?"Bevanda aggiunta":"Bevanda aggiornata","✓");
+  });
+  if(!nuovo) document.getElementById("eDel").addEventListener("click",async()=>{
+    const fresco=(await leggi(K_CATALOGO,true))||catalogo;
+    await salvaCatalogo(fresco.filter(x=>x.id!==base.id));
+    chiudiSheet(); ridisegnaGriglia(); toast("Bevanda eliminata","✓");
+  });
+}
+
+/* ── correzione dell'iscrizione ── */
+function editorPilota(){
+  apriSheet(`<h3>La mia iscrizione</h3>
+    <p class="nota" style="margin-top:2px">Correggi quello che hai sbagliato. Punteggio e consumazioni
+    restano dove sono; se vuoi ripartire da zero usa il tasto in fondo.</p>
+    <label class="campo"><span class="eyebrow">Nome pilota</span><input id="pxN" maxlength="18" value="${esc(io.nome)}"></label>
+    <label class="campo"><span class="eyebrow">Peso in kg</span><input id="pxP" inputmode="numeric" maxlength="3" value="${io.peso}"></label>
+    <div class="campo"><span class="eyebrow">Metabolismo</span><div class="coppia">
+      <button data-s="M" class="${io.sesso!=="F"?"on":""}">Uomo</button>
+      <button data-s="F" class="${io.sesso==="F"?"on":""}">Donna</button></div></div>
+    <button class="sheet-btn primo" id="pxOk">Salva le correzioni</button>
+    <button class="sheet-btn rosso" id="pxNuovo">Rifai l'iscrizione da zero</button>
+    <button class="sheet-btn dopo" id="pxNo">Annulla</button>`);
+  let sesso=io.sesso;
+  const g=id=>document.getElementById(id);
+  document.querySelectorAll("#sheet .coppia button").forEach(b=>b.addEventListener("click",()=>{
+    sesso=b.dataset.s;
+    document.querySelectorAll("#sheet .coppia button").forEach(x=>x.classList.toggle("on",x===b));
+  }));
+  g("pxP").addEventListener("input",()=>{g("pxP").value=g("pxP").value.replace(/\D/g,"")});
+  g("pxNo").addEventListener("click",chiudiSheet);
+  g("pxOk").addEventListener("click",async()=>{
+    const n=g("pxN").value.trim(), pe=+g("pxP").value;
+    if(n.length<2||pe<35) return;
+    await salva({...io,nome:n,peso:pe,sesso,updated:Date.now()});
+    chiudiSheet(); disegnaBox(); aggiornaVista(); toast("Iscrizione aggiornata","✓");
+  });
+  g("pxNuovo").addEventListener("click",async()=>{
+    const via=io.id;
+    if(typeof segnaRimossi==="function") segnaRimossi([via]);
+    const gr=(await leggi(K_GRIGLIA,true))||{}; delete gr[via];
+    await scrivi(K_GRIGLIA,gr,true);
+    chiudiSheet(); await cambiaPilota();
+  });
+}
+
+/* ── sfide scritte dal gruppo ── */
+function ridisegnaCustom(){
+  const l=document.getElementById("listaCustom"); if(!l) return;
+  const mie=custom||[];
+  if(!mie.length){
+    l.innerHTML=`<div class="nastro-wrap" style="color:var(--testo-3);font-size:13.5px;line-height:1.5">
+      Proponi una sfida: titolo, testo, durata, punti e penalità. Passa dalla direzione gara, che decide
+      se lanciarla e a chi.</div>`;
+    return;
+  }
+  l.innerHTML=mie.map(m=>`<button class="opz" data-c="${m.id}" style="margin-top:8px">
+    <b style="font-family:var(--cond);letter-spacing:.06em;text-transform:uppercase">${esc(m.nome)}</b>
+    <div style="font-size:13px;color:var(--testo-2);margin-top:3px;line-height:1.4">${esc(m.testo)}</div>
+    <div style="font-family:var(--mono);font-size:11px;color:var(--testo-3);margin-top:5px">${m.durata} min · +${m.punti}${m.malus?" / "+m.malus:""}</div>
+  </button>`).join("");
+  l.querySelectorAll(".opz[data-c]").forEach(b=>b.addEventListener("click",()=>{
+    editorSfida(mie.find(x=>x.id===b.dataset.c));
+  }));
+}
+
+function editorSfida(m){
+  const nuovo=!m, b=m||{nome:"",testo:"",durata:6,punti:20,malus:-10};
+  apriSheet(`<h3>${nuovo?"Nuova sfida":"Modifica sfida"}</h3>
+    <p class="nota" style="margin-top:2px">La proposta va alla direzione gara: se la approva, parte sui
+    telefoni dei destinatari. Regole e penalità le decidete voi.</p>
+    <label class="campo"><span class="eyebrow">Nome</span><input id="sfN" maxlength="24" value="${esc(b.nome)}" placeholder="Es. Duello alla staccata"></label>
+    <label class="campo"><span class="eyebrow">Cosa succede</span><input id="sfT" maxlength="140" value="${esc(b.testo)}" placeholder="Scrivi la regola per esteso"></label>
+    <div class="riga2">
+      <label class="campo"><span class="eyebrow">Minuti</span><input id="sfD" inputmode="numeric" value="${b.durata}"></label>
+      <label class="campo"><span class="eyebrow">Se la fai</span><input id="sfP" inputmode="numeric" value="${b.punti}"></label>
+      <label class="campo"><span class="eyebrow">Se fallisci</span><input id="sfM" inputmode="numeric" value="${b.malus}"></label>
+    </div>
+    <button class="sheet-btn primo" id="sfOk">Manda al muretto per l'approvazione</button>
+    ${nuovo?"":`<button class="sheet-btn rosso" id="sfDel">Elimina</button>`}
+    <button class="sheet-btn dopo" id="sfNo">Annulla</button>`);
+  const g=id=>document.getElementById(id);
+  const ck=()=>g("sfOk").disabled=!(g("sfN").value.trim()&&g("sfT").value.trim());
+  ["sfN","sfT"].forEach(i=>g(i).addEventListener("input",ck)); ck();
+  g("sfNo").addEventListener("click",chiudiSheet);
+  g("sfOk").addEventListener("click",async()=>{
+    const pr={id:"x"+Date.now().toString(36),nome:g("sfN").value.trim(),testo:g("sfT").value.trim(),
+      durata:Math.max(1,Math.min(60,+g("sfD").value||6)),punti:+g("sfP").value||0,malus:+g("sfM").value||0,
+      da:io.id,daNome:io.nome,dest:null,ts:Date.now()};
+    if(backend==="cloud") await fbProponi(pr);
+    else { const l=(await leggi(K_PROP,true))||[]; l.push(pr); await scrivi(K_PROP,l,true); }
+    chiudiSheet(); ridisegnaCustom();
+    toast("Proposta inviata al muretto","→");
+  });
+  if(!nuovo) g("sfDel").addEventListener("click",async()=>{
+    const fresco=(await leggi(K_CUSTOM,true))||[];
+    custom=fresco.filter(x=>x.id!==b.id);
+    await scrivi(K_CUSTOM,custom,true);
+    chiudiSheet(); ridisegnaCustom(); toast("Sfida eliminata","✓");
+  });
+}
+
+/* ── GPS ── */
+function mostraAgg(v){const b=document.getElementById("gpsAgg");if(b)b.style.display=v?"inline-block":"none"}
+
+function chiediPosizione(silenzioso){
+  const st=document.getElementById("gpsStato"), sw=document.getElementById("gpsSw");
+  if(!navigator.geolocation){ if(st) st.textContent="Questo browser non espone la posizione."; return; }
+  if(st&&!silenzioso) st.textContent="Richiesta in corso…";
+  navigator.geolocation.getCurrentPosition(async pos=>{
+    const {latitude:lat,longitude:lng,accuracy:acc}=pos.coords, ora=Date.now();
+    ultimaPos={lat,lng,acc}; ultimoInvio=ora; gpsId=1;
+    if(sw) sw.classList.add("on");
+    await salva({...io,gps:{lat,lng,acc,t:ora},updated:ora});
+    if(st) st.textContent=`Condivisa · precisione ${Math.round(acc)} m · rilevata ${oraDi(ora)}`+(diagErr?" · ARCHIVIO KO":"");
+    mostraAgg(true);
+  },err=>{
+    if(!silenzioso){ gpsId=null; if(sw) sw.classList.remove("on"); }
+    if(st) st.textContent=err.code===1
+      ? "Permesso negato (codice 1). Se sei nell'anteprima della chat il riquadro blocca il GPS: apri il file in una scheda del browser."
+      : err.code===2 ? "Nessun fix disponibile (codice 2). Prova all'aperto o accendi la localizzazione di sistema."
+      : "Tempo scaduto (codice 3). Tocca Aggiorna per riprovare.";
+  },{enableHighAccuracy:true,maximumAge:0,timeout:25000});
+}
+
+function accendiGps(){
+  chiediPosizione(false);
+  clearInterval(gpsBattito);
+  const n=Object.keys(griglia).length;
+  const ogni=(n<50?5:n<150?10:15)*60e3;   // meno scritture quando siamo in tanti
+  gpsBattito=setInterval(()=>{ if(gpsId&&io) chiediPosizione(true) },ogni);
+}
+
+async function spegniGps(){
+  clearInterval(gpsBattito); ultimaPos=null; gpsId=null; mostraAgg(false);
+  const sw=document.getElementById("gpsSw"), st=document.getElementById("gpsStato");
+  if(sw) sw.classList.remove("on");
+  if(st) st.textContent="Spenta. Accendila e comparirai sulla mappa del muretto.";
+  if(io&&io.gps) await salva({...io,gps:null,updated:Date.now()});
+}
+
+/* ══ MAPPA (Leaflet + OpenStreetMap) ══
+   Niente chiave API da gestire: le tessere arrivano da OSM e il tema
+   scuro è ottenuto con un filtro CSS. Se le tessere non caricano si
+   ricade sul tracciato a cerchi disegnato su canvas.               */
+let mappa=null, pin={}, mappaPronta=false;
+function avviaMappa(){
+  if(mappaPronta||typeof L==="undefined") return false;
+  const el=document.getElementById("mappaL"); if(!el) return false;
+  el.style.display="block";
+  document.getElementById("mappa").style.display="none";
+  mappa=L.map(el,{zoomControl:true,attributionControl:true}).setView([VARANO.lat,VARANO.lng],15);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{
+    maxZoom:19, attribution:'© OpenStreetMap'
+  }).addTo(mappa);
+  mappaPronta=true;
+  setTimeout(()=>mappa.invalidateSize(),200);
+  return true;
+}
+function disegnaMappaVera(){
+  if(!mappaPronta) return false;
+  const punti=Object.values(griglia).filter(p=>p.gps&&Date.now()-p.gps.t<3600e3);
+  const lab=document.getElementById("mwScala");
+  for(const id of Object.keys(pin)) if(!punti.some(p=>p.id===id)){ mappa.removeLayer(pin[id]); delete pin[id]; }
+  for(const p of punti){
+    const st=stato(p), c=col(BANDIERE[st.bandiera].c);
+    const vecchio=Date.now()-p.gps.t>10*60e3;
+    const html=`<div class="pin" style="opacity:${vecchio?.5:1}"><i style="background:${c}"></i><b>${esc(p.nome)}</b></div>`;
+    const ic=L.divIcon({html,className:"",iconSize:[0,0]});
+    if(pin[p.id]){ pin[p.id].setLatLng([p.gps.lat,p.gps.lng]).setIcon(ic); }
+    else {
+      pin[p.id]=L.marker([p.gps.lat,p.gps.lng],{icon:ic}).addTo(mappa);
+      pin[p.id].on("click",()=>schedaPilota(p.id));
+    }
+  }
+  if(punti.length){
+    if(!mappa._inquadrato||mappa._nPunti!==punti.length){
+      mappa.fitBounds(L.latLngBounds(punti.map(p=>[p.gps.lat,p.gps.lng])).pad(0.45),{maxZoom:17});
+      mappa._inquadrato=true; mappa._nPunti=punti.length;
+    }
+    if(lab) lab.textContent=`${punti.length} in mappa · OpenStreetMap`;
+  } else if(lab) lab.textContent="nessuna posizione condivisa";
+  return true;
+}
+
+/* ══ CODA PROPOSTE — nulla parte senza approvazione ══ */
+function codaProposte(){
+  const pr=(doc.proposte||[]);
+  apriSheet(`<h3>Proposte dai piloti</h3>
+    <p class="nota" style="margin-top:2px">${pr.length?"Niente arriva ai telefoni finché non approvi.":"Nessuna proposta in attesa."}</p>
+    <div id="cdLista">${pr.map((x,i)=>`<div class="nastro-wrap" style="margin-top:8px">
+      <div style="font-family:var(--cond);font-weight:700;letter-spacing:.06em;text-transform:uppercase">${esc(x.nome)}</div>
+      <div style="font-size:13.5px;color:var(--testo-2);margin-top:4px;line-height:1.45">${esc(x.testo)}</div>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--testo-3);margin-top:6px">da ${esc(x.daNome||"?")} · ${x.durata} min · +${x.punti}${x.malus?" / "+x.malus:""}${x.dest?" · "+x.dest.length+" destinatari":" · tutti"}</div>
+      <button class="opz" data-ok="${i}" style="margin-top:8px">Approva e lancia</button>
+      <button class="opz" data-no="${i}">Rifiuta</button></div>`).join("")}</div>
+    <button class="sheet-btn dopo" id="cdNo">Chiudi</button>`);
+  document.getElementById("cdNo").addEventListener("click",chiudiSheet);
+  document.querySelectorAll("#cdLista .opz[data-ok]").forEach(b=>b.addEventListener("click",async()=>{
+    const x=pr[+b.dataset.ok];
+    await lanciaSfida({id:"d"+Date.now(),tipo:"diretta",nome:x.nome,testo:x.testo,inizio:Date.now(),
+      fine:Date.now()+(x.durata||5)*60e3,punti:x.punti||20,malus:x.malus||0,dest:x.dest||null,
+      prossima:Date.now()+(x.durata||5)*60e3+10*60e3});
+    await rimuoviProposta(x);
+    chiudiSheet(); toast("Approvata e lanciata","✓");
+  }));
+  document.querySelectorAll("#cdLista .opz[data-no]").forEach(b=>b.addEventListener("click",async()=>{
+    await rimuoviProposta(pr[+b.dataset.no]); chiudiSheet(); toast("Proposta rifiutata","✓");
+  }));
+}
+async function rimuoviProposta(x){
+  doc.proposte=(doc.proposte||[]).filter(y=>y!==x);
+  if(backend==="cloud"&&x.rid) await fbTogliProposta(x.rid); else await scrivi(K_PROP,doc.proposte,true);
+  disegnaMuretto();
+}
+
+/* ══ REPORT E RIPRISTINO ══ */
+function istantanea(){
+  return {app:"box-box-box",versione:3,gara:NET.id||"locale",salvato:new Date().toISOString(),
+    griglia,catalogo,custom,sfida,proposte:doc.proposte||[]};
+}
+function scarica(nome,contenuto,tipo){
+  const b=new Blob([contenuto],{type:tipo});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(b); a.download=nome;
+  document.body.appendChild(a); a.click();
+  setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);
+}
+function csvPosizioni(){
+  const righe=[["pilota","data","ora","latitudine","longitudine","precisione_m","distanza_autodromo_m","punti","unita","bicchieri","alcolemia"]];
+  for(const p of Object.values(griglia)){
+    const st=stato(p), g=p.gps;
+    const d=g?new Date(g.t):null;
+    righe.push([p.nome, d?d.toLocaleDateString("it-IT"):"", d?d.toLocaleTimeString("it-IT"):"",
+      g?g.lat.toFixed(6):"", g?g.lng.toFixed(6):"", g?Math.round(g.acc):"",
+      g?distanzaDa(VARANO,g):"", st.punti, st.unita.toFixed(1), st.alc, st.bac.toFixed(2)]);
+  }
+  return righe.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(";")).join("\n");
+}
+function pannelloReport(){
+  const n=Object.keys(griglia).length, conGps=Object.values(griglia).filter(p=>p.gps).length;
+  const oggi=new Date().toISOString().slice(0,10);
+  apriSheet(`<h3>Report e ripristino</h3>
+    <p class="nota" style="margin-top:2px">${n} piloti in griglia, ${conGps} con posizione.
+    Il backup completo rimette tutto com'era se il sistema perde i dati.</p>
+    <button class="sheet-btn primo" id="rpCsv">Scarica posizioni e classifica (CSV)</button>
+    <button class="sheet-btn dopo" id="rpJson">Scarica backup completo (JSON)</button>
+    <button class="sheet-btn dopo" id="rpCarica">Ripristina da un backup</button>
+    <input type="file" id="rpFile" accept=".json,application/json" style="display:none">
+    <button class="sheet-btn dopo" id="rpNo">Chiudi</button>
+    <div id="rpMsg" style="font-size:13px;margin-top:10px"></div>`);
+  const q=i=>document.getElementById(i);
+  q("rpNo").addEventListener("click",chiudiSheet);
+  q("rpCsv").addEventListener("click",()=>scarica(`boxbox-${oggi}.csv`,"\ufeff"+csvPosizioni(),"text/csv;charset=utf-8"));
+  q("rpJson").addEventListener("click",()=>scarica(`boxbox-backup-${oggi}.json`,JSON.stringify(istantanea(),null,1),"application/json"));
+  q("rpCarica").addEventListener("click",()=>q("rpFile").click());
+  q("rpFile").addEventListener("change",async e=>{
+    const f=e.target.files[0]; if(!f) return;
+    try{
+      const d=JSON.parse(await f.text());
+      if(!d.griglia) throw new Error("file non riconosciuto");
+      griglia={...griglia,...d.griglia};
+      if(Array.isArray(d.catalogo)&&d.catalogo.length) catalogo=d.catalogo;
+      if(Array.isArray(d.custom)) custom=d.custom;
+      if(backend==="relay"){
+        Object.values(d.griglia).forEach(relayPubblicaPilota);
+        relayPubblicaStato(true);
+      } else {
+        await scrivi(K_GRIGLIA,griglia,true);
+      }
+      await scrivi(K_CATALOGO,catalogo,true);
+      await scrivi(K_CUSTOM,custom,true);
+      q("rpMsg").innerHTML=`<span style="color:var(--verde)">Ripristinati ${Object.keys(d.griglia).length} piloti.</span>`;
+      disegnaMuretto();
+    }catch(err){ q("rpMsg").innerHTML=`<span style="color:var(--rossa)">${esc(err.message)}</span>`; }
+  });
+}
+
+/* ══ COMPOSITORE SFIDE — direzione gara ══ */
+function compositore(preselezionati){
+  const piloti=Object.values(griglia).sort((a,b)=>String(a.nome).localeCompare(String(b.nome)));
+  const sel=new Set(preselezionati||[]);
+  apriSheet(`<h3>Nuova sfida</h3>
+    <label class="campo"><span class="eyebrow">Titolo</span><input id="cpN" maxlength="28" placeholder="Es. Duello alla staccata"></label>
+    <label class="campo"><span class="eyebrow">Cosa devono fare</span><input id="cpT" maxlength="180" placeholder="Scrivi la regola per esteso"></label>
+    <div class="riga2">
+      <label class="campo"><span class="eyebrow">Minuti</span><input id="cpD" inputmode="numeric" value="5"></label>
+      <label class="campo"><span class="eyebrow">Se la fa</span><input id="cpP" inputmode="numeric" value="25"></label>
+      <label class="campo"><span class="eyebrow">Se fallisce</span><input id="cpM" inputmode="numeric" value="-10"></label>
+    </div>
+    <div class="campo"><span class="eyebrow">Destinatari — ${piloti.length} in griglia</span>
+      <div class="coppia" style="margin-bottom:8px">
+        <button id="cpTutti" class="${sel.size?"":"on"}">Tutti</button>
+        <button id="cpAlcuni" class="${sel.size?"on":""}">Solo alcuni</button>
+      </div>
+      <div id="cpLista" style="max-height:190px;overflow:auto;display:${sel.size?"block":"none"}">
+        <input id="cpCerca" placeholder="cerca…" style="width:100%;background:var(--asfalto);border:1px solid var(--linea);border-radius:10px;padding:10px;color:var(--testo);font-family:var(--mono);font-size:14px;outline:none;margin-bottom:6px">
+        <div id="cpPiloti"></div>
+      </div>
+    </div>
+    <button class="sheet-btn primo" id="cpGo">Lancia adesso</button>
+    <button class="sheet-btn dopo" id="cpNo">Annulla</button>`);
+  const q=i=>document.getElementById(i);
+  let mirata=sel.size>0;
+  const disegna=()=>{
+    const f=(q("cpCerca").value||"").toLowerCase();
+    q("cpPiloti").innerHTML=piloti.filter(p=>p.nome.toLowerCase().includes(f)).slice(0,300)
+      .map(p=>`<button class="opz" data-p="${p.id}" style="margin-top:5px;padding:10px 12px;${sel.has(p.id)?"border-color:var(--box);color:var(--box)":""}">
+        ${sel.has(p.id)?"✓ ":""}${esc(p.nome)}</button>`).join("")||`<div class="nota">Nessun pilota.</div>`;
+    q("cpPiloti").querySelectorAll(".opz[data-p]").forEach(b=>b.addEventListener("click",()=>{
+      const id=b.dataset.p; sel.has(id)?sel.delete(id):sel.add(id); disegna();
+    }));
+  };
+  q("cpCerca").addEventListener("input",disegna); disegna();
+  q("cpTutti").addEventListener("click",()=>{ mirata=false; sel.clear(); q("cpTutti").classList.add("on"); q("cpAlcuni").classList.remove("on"); q("cpLista").style.display="none"; });
+  q("cpAlcuni").addEventListener("click",()=>{ mirata=true; q("cpAlcuni").classList.add("on"); q("cpTutti").classList.remove("on"); q("cpLista").style.display="block"; disegna(); });
+  q("cpNo").addEventListener("click",chiudiSheet);
+  q("cpGo").addEventListener("click",async()=>{
+    const nome=q("cpN").value.trim(), testo=q("cpT").value.trim();
+    if(!nome||!testo) return;
+    const dur=Math.max(1,Math.min(90,+q("cpD").value||5));
+    const sf={id:"d"+Date.now(),tipo:"diretta",nome,testo,inizio:Date.now(),fine:Date.now()+dur*60e3,
+      punti:+q("cpP").value||0,malus:+q("cpM").value||0,
+      dest:(mirata&&sel.size)?[...sel]:null,prossima:Date.now()+dur*60e3+10*60e3};
+    await lanciaSfida(sf);
+    chiudiSheet(); toast(sf.dest?`Inviata a ${sf.dest.length} piloti`:"Lanciata a tutti","✓");
+  });
+}
+
+async function lanciaSfida(sf){
+  sfida=sf; suonata=sf.id;
+  if(backend==="cloud"&&sf.dest){
+    for(const id of sf.dest) await fbAlPilota(id,"sfidaDiretta",sf);
+  } else if(backend==="cloud"){
+    doc.sfida=sf; await fbStato({sfida:sf});
+  } else if(backend==="relay"&&sf.dest){
+    for(const id of sf.dest) relayPubblica(topDm(MQ.code,id),sf,false);
+  } else if(backend==="relay"){
+    doc.sfida=sf; MQ.pubAl=0; relayPubblicaStato(true);
+  } else {
+    await scrivi(K_SFIDA,sf,true);
+  }
+  disegnaSfida(); if(modo==="muretto") disegnaMuretto();
+}
+
+/* ══ SCHEDA PILOTA — direzione gara ══ */
+function distanzaDa(p,q){ return Math.round(Math.hypot((q.lng-p.lng)*111320*Math.cos(p.lat*Math.PI/180),(q.lat-p.lat)*111320)) }
+function schedaPilota(id){
+  const p=griglia[id]; if(!p) return;
+  const st=stato(p), b=BANDIERE[st.bandiera];
+  const g=p.gps;
+  const dV=g?distanzaDa(VARANO,g):null;
+  apriSheet(`<h3>${esc(p.nome)}</h3>
+    <div class="anteprima" style="margin-top:6px"><span class="eyebrow">Punti · unità · alcolemia</span>
+      <b>${st.punti} · ${st.unita.toFixed(1)} · <span style="color:${col(b.c)}">${st.bac.toFixed(2)}</span></b></div>
+    <div style="font-size:13.5px;color:var(--testo-2);line-height:1.6;margin-top:12px">
+      ${st.alc} bicchieri · ${st.h2o} acque · ${(st.bonus>=0?"+":"")+st.bonus} da sfide<br>
+      ${g?`Posizione: ${g.lat.toFixed(5)}, ${g.lng.toFixed(5)} · precisione ${Math.round(g.acc)} m<br>
+          Ultimo aggiornamento ${oraDi(g.t)} · ${dV>=1000?(dV/1000).toFixed(1)+" km":dV+" m"} dall'autodromo`
+         :`<span style="color:var(--testo-3)">Posizione non condivisa.</span>`}
+    </div>
+    ${g?`<button class="sheet-btn primo" id="spVai">Centra sulla mappa</button>
+         <button class="sheet-btn dopo" id="spNav">Apri in Google Maps</button>`:""}
+    <button class="sheet-btn dopo" id="spMsg">Manda un messaggio dalla direzione gara</button>
+    <button class="sheet-btn dopo" id="spSfida">Assegna una sfida solo a lui</button>
+    <button class="sheet-btn dopo" id="spNo">Chiudi</button>`);
+  const q=i=>document.getElementById(i);
+  q("spNo").addEventListener("click",chiudiSheet);
+  if(g){
+    q("spVai").addEventListener("click",()=>{ chiudiSheet(); if(mappaPronta){ mappa.setView([g.lat,g.lng],18); } });
+    q("spNav").addEventListener("click",()=>window.open(`https://www.google.com/maps/search/?api=1&query=${g.lat},${g.lng}`,"_blank"));
+  }
+  q("spMsg").addEventListener("click",()=>messaggioA(p));
+  q("spSfida").addEventListener("click",()=>compositore([p.id]));
+}
+
+function messaggioA(p){
+  apriSheet(`<h3>Radio a ${esc(p.nome)}</h3>
+    <p class="nota" style="margin-top:2px">Arriva solo a lui, con suono e vibrazione.</p>
+    <label class="campo"><span class="eyebrow">Messaggio</span><input id="msgT" maxlength="160" placeholder="Box, box — passa dal muretto"></label>
+    <button class="sheet-btn primo" id="msgOk">Manda</button>
+    <button class="sheet-btn dopo" id="msgNo">Annulla</button>`);
+  document.getElementById("msgNo").addEventListener("click",chiudiSheet);
+  document.getElementById("msgOk").addEventListener("click",async()=>{
+    const testo=document.getElementById("msgT").value.trim(); if(!testo) return;
+    const m={testo,da:"Direzione gara",ts:Date.now()};
+    if(backend==="cloud") await fbAlPilota(p.id,"msg",m);
+    else if(backend==="relay") relayPubblica(topDm(MQ.code,p.id),{...m,tipoMsg:"radio"},false);
+    else { const gr=(await leggi(K_GRIGLIA,true))||{}; if(gr[p.id]){ gr[p.id]={...gr[p.id],msg:m,updated:Date.now()}; await scrivi(K_GRIGLIA,gr,true); } }
+    chiudiSheet(); toast("Messaggio inviato","✓");
+  });
+}
+
+/* messaggio in arrivo sul telefono del pilota */
+function mostraMessaggio(m){
+  suona("sfida");
+  if(navigator.vibrate) navigator.vibrate([40,80,40]);
+  svegliaRiposo();
+  apriSheet(`<h3>Radio dal muretto</h3>
+    <p style="font-size:17px;line-height:1.45;color:var(--testo)">${esc(m.testo)}</p>
+    <p class="nota" style="margin-top:0">${esc(m.da||"Direzione gara")} · ${oraDi(m.ts)}</p>
+    <button class="sheet-btn primo" id="msgVisto">Ricevuto</button>`);
+  document.getElementById("msgVisto").addEventListener("click",chiudiSheet);
+}
+
+/* ══ AZZERAMENTO ══
+   Parte dal muretto e raggiunge tutti: la griglia si svuota e ogni
+   telefono, alla prima sincronizzazione, ripulisce il proprio pilota. */
+function foglioReset(){
+  const n=Object.keys(griglia).length;
+  apriSheet(`<h3>Azzera la gara</h3>
+    <p>In griglia ci sono ${n} piloti. L'operazione raggiunge tutti i dispositivi collegati e non si
+    torna indietro: consumazioni, punti, penalità, posizioni e sfida in corso vengono cancellati.</p>
+    <button class="sheet-btn rosso" id="rsGara">Azzera la gara — piloti e punteggi</button>
+    <button class="sheet-btn rosso" id="rsTutto">Azzera tutto — anche bevande e sfide del gruppo</button>
+    <button class="sheet-btn dopo" id="rsNo">Annulla</button>`);
+  document.getElementById("rsNo").addEventListener("click",chiudiSheet);
+  document.getElementById("rsGara").addEventListener("click",()=>azzera(false));
+  document.getElementById("rsTutto").addEventListener("click",()=>azzera(true));
+}
+
+async function azzera(tutto){
+  const g=(await leggi(K_GRIGLIA,true))||{};
+  if(typeof segnaRimossi==="function") segnaRimossi(Object.keys(g));
+  if(backend==="relay") Object.keys(g).forEach(relayCancellaPilota);
+  if(backend==="cloud") for(const id of Object.keys(g)) await fbTogliPilota(id);
+  if(typeof possesso!=="undefined") possesso.clear();
+  griglia={}; doc.griglia={};
+  await scrivi(K_GRIGLIA,{},true);
+  await scrivi(K_SFIDA,{id:"s0",tipo:"veloce",inizio:0,fine:0,prossima:Date.now()+5*60e3},true);
+  sfida=null; suonata=null;
+  if(tutto){
+    catalogo=[...CATALOGO_BASE]; await scrivi(K_CATALOGO,CATALOGO_BASE,true);
+    custom=[]; await scrivi(K_CUSTOM,[],true);
+  }
+  const marca=Date.now();
+  doc.reset=marca;
+  await scrivi(K_RESET,marca,true);
+  chiudiSheet();
+  if(modo==="muretto"){ disegnaMuretto(); disegnaSfida(); }
+  else aggiornaVista();
+  toast(tutto?"Azzerato tutto":"Gara azzerata","✓");
+}
+
+/* ogni pilota si ripulisce da solo quando vede un azzeramento più recente */
+async function applicaReset(){
+  if(!io) return;
+  const r=(await leggi(K_RESET,true))||0;
+  if(!r || r<=(io.azzeratoAl||0)) return;
+  await salva({...io,drinks:[],bonus:[],gps:null,azzeratoAl:r,nato:Date.now(),updated:Date.now()});
+  nTacche=0; suonata=null;
+  if(tab==="box") disegnaBox();
+  toast("Gara azzerata dal muretto","✓");
+}
+
+/* ══ MURETTO ══ */
+function avviaMuretto(){
+  const cv=document.getElementById("mappa");
+  const ridimensiona=()=>{
+    const r=cv.getBoundingClientRect(), d=window.devicePixelRatio||1;
+    cv.width=Math.max(1,r.width*d); cv.height=Math.max(1,r.height*d);
+    const cx=cv.getContext&&cv.getContext("2d");
+    if(cx) cx.setTransform(d,0,0,d,0,0);
+    disegnaMappa();
+  };
+  window.addEventListener("resize",()=>{ ridimensiona(); if(mappaPronta) mappa.invalidateSize(); });
+  setTimeout(()=>{ if(!avviaMappa()) ridimensiona(); disegnaMappa(); },250);
+  tieniSveglio(true);
+  document.getElementById("mwLancia").addEventListener("click",()=>compositore(null));
+  document.getElementById("mwCoda").addEventListener("click",codaProposte);
+  document.getElementById("mwReport").addEventListener("click",pannelloReport);
+  document.getElementById("mwReset").addEventListener("click",foglioReset);
+  document.getElementById("mwProva").addEventListener("click",async()=>{
+    const nomi=["Collaudatore","Muletto","Terza guida","Riserva"];
+    const n=nomi[Math.floor(Math.random()*nomi.length)]+" "+Math.floor(Math.random()*90+10);
+    const id="prova_"+Date.now().toString(36);
+    const g=(await leggi(K_GRIGLIA,true))||{};
+    g[id]={id,nome:n,peso:75,sesso:"M",prova:true,nato:Date.now()-3600e3,
+      drinks:[{t:Date.now()-2400e3,tipo:"birra33",nome:"Birra 33",g:13},
+              {t:Date.now()-900e3,tipo:"acqua",nome:"Acqua",g:0}],
+      bonus:[],
+      gps:{lat:VARANO.lat+(Math.random()-.5)*.004,lng:VARANO.lng+(Math.random()-.5)*.004,acc:12,t:Date.now()},
+      updated:Date.now()};
+    const ok=await scrivi(K_GRIGLIA,g,true);
+    await sincronizza();
+    if(!ok) alert("Scrittura sull'archivio condiviso fallita:\n"+diagErr);
+  });
+  document.getElementById("mwPulisci").addEventListener("click",async()=>{
+    const g=(await leggi(K_GRIGLIA,true))||{};
+    const via=Object.keys(g).filter(k=>g[k].prova);
+    for(const k of via) delete g[k];
+    segnaRimossi(via);
+    if(backend==="relay") via.forEach(relayCancellaPilota);
+    await scrivi(K_GRIGLIA,g,true); await sincronizza();
+  });
+  const ma=document.getElementById("mwAudio");
+  ma.addEventListener("click",()=>{
+    muto=!muto; ma.classList.toggle("spento",muto); ma.textContent=muto?"🔇":"🔊";
+    if(!muto){ sbloccaAudio(); suona("ok"); }
+  });
+  setInterval(()=>{document.getElementById("mwOra").textContent=new Date().toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-digit"})},1000);
+  disegnaMuretto();
+}
+
+function disegnaMuretto(){
+  const righe=classifica();
+  const mc=document.getElementById("mwCodice");
+  if(mc) mc.textContent = NET.id || (backend==="anteprima"?"anteprima":"locale");
+  const dg=document.getElementById("mwDiag");
+  if(dg){
+    const conGps=Object.values(griglia).filter(p=>p.gps).length;
+    dg.innerHTML = diagErr
+      ? `<span style="color:var(--rossa)">${esc(diagErr).slice(0,70)}</span>`
+      : `${VERSIONE} · ${backend==="live"?(ruolo==="host"?"diretto · host · "+conns.length+" collegati":"diretto · ospite"):backend==="cloud"?"cloud · "+FB.letture+" letture "+FB.scritture+" scritture":backend==="relay"?"relay · "+MQ.vivi+" broker · "+MQ.inviati+"↑ "+MQ.ricevuti+"↓ · "+Math.round(MQ.byte/1024)+" KB":backend} · ${diagLetto} record · ${conGps} con gps · sync ${diagSync?oraDi(diagSync):"—"}`;
+  }
+  document.getElementById("mwN").textContent=righe.length;
+  document.getElementById("mwU").textContent=righe.reduce((a,r)=>a+r.s.alc,0);
+  document.getElementById("mwOk").textContent=righe.filter(r=>r.s.bac<LIMITE).length;
+
+  const c=document.getElementById("mwTorre");
+  if(!righe.length){
+    c.innerHTML=`<div class="vuoto"><b>Griglia vuota</b>${diagErr
+      ? "L'archivio condiviso risponde con un errore: "+esc(diagErr)
+      : "Nessun pilota registrato nell'archivio condiviso.<br>Sul telefono serve aprire lo stesso link, scegliere <b>Sono un pilota</b> e completare il foglio iscrizioni.<br>Con <b>+ pilota di prova</b> qui sopra verifichi che il canale funzioni."}</div>`;
+  }else{
+    const mostrate=righe.slice(0,MAX_TORRE), animabile=mostrate.length<=40;
+    const prima=new Map();
+    if(animabile) c.querySelectorAll(".mwr").forEach(e=>prima.set(e.dataset.id,e.getBoundingClientRect().top));
+    c.innerHTML=mostrate.map((r,i)=>{
+      const b=BANDIERE[r.s.bandiera], cc=col(b.c);
+      return `<div class="mwr${i===0?" p1":""}" data-id="${r.p.id}">
+        <div class="fl" style="background:${cc}"></div><div class="p">${i+1}</div>
+        <div class="nm"><b>${esc(r.p.nome)}${r.s.sc?" · SC":""}</b>
+        <span>${b.testo} · ${r.s.alc} bicchieri${r.p.gps?" · gps":""}</span></div>
+        <div class="col"><i>${tr("unitaC")}</i><b>${r.s.unita.toFixed(1)}</b></div>
+        <div class="col"><i>g/L</i><b style="color:${cc}">${r.s.bac.toFixed(2)}</b></div>
+        <div class="col"><i>${tr("punti")}</i><b>${r.s.punti}</b></div></div>`;
+    }).join("")+(righe.length>MAX_TORRE
+      ? `<div class="vuoto" style="padding:18px">e altri ${righe.length-MAX_TORRE} piloti in griglia</div>`:"");
+    if(animabile&&!(typeof matchMedia==="function"&&matchMedia("(prefers-reduced-motion: reduce)").matches))
+      c.querySelectorAll(".mwr").forEach(e=>{
+        const p=prima.get(e.dataset.id); if(p===undefined) return;
+        const d=p-e.getBoundingClientRect().top; if(!d) return;
+        e.animate([{transform:`translateY(${d}px)`},{transform:"none"}],{duration:420,easing:"cubic-bezier(.77,0,.175,1)"});
+      });
+  }
+
+  const ev=[];
+  for(const {p,s} of righe) for(const d of s.drinks) ev.push({t:d.t,chi:p.nome,cosa:d.nome||"Pit stop",k:d.k,u:(+d.g||0)/12});
+  ev.sort((a,b)=>b.t-a.t);
+  document.getElementById("mwFeed").innerHTML=ev.slice(0,14).map(e=>
+    `<div class="fev"><span class="o">${oraDi(e.t)}</span><span class="w">${esc(e.chi)} · ${esc(e.cosa)}</span>
+     <span class="d" style="color:${e.k==="h2o"?"var(--acqua)":"var(--verde)"}">${e.k==="h2o"?"+6":"+"+Math.round(e.u*10)}</span></div>`
+  ).join("")||`<div class="vuoto" style="padding:26px">Nessun pit stop registrato.</div>`;
+
+  disegnaMappa();
+}
+
+function disegnaMappa(){
+  if(avviaMappa()&&disegnaMappaVera()) return;
+  const cv=document.getElementById("mappa"); if(!cv||!cv.width) return;
+  const g=cv.getContext&&cv.getContext("2d"); if(!g) return;
+  const W=cv.clientWidth, H=cv.clientHeight;
+  g.clearRect(0,0,W,H);
+  const punti=Object.values(griglia).filter(p=>p.gps&&Date.now()-p.gps.t<3600e3);
+  const lab=document.getElementById("mwScala");
+  if(!punti.length){
+    g.fillStyle="#5f7078"; g.font='500 14px "Barlow",sans-serif'; g.textAlign="center";
+    g.fillText("Nessuna posizione condivisa.",W/2,H/2-8);
+    g.fillText("I piloti accendono il GPS dalla scheda del proprio box.",W/2,H/2+14);
+    lab.textContent="—"; return;
+  }
+  const cLat=punti.reduce((a,p)=>a+p.gps.lat,0)/punti.length;
+  const cLng=punti.reduce((a,p)=>a+p.gps.lng,0)/punti.length;
+  const mLat=111320, mLng=111320*Math.cos(cLat*Math.PI/180);
+  const xy=p=>({x:(p.gps.lng-cLng)*mLng,y:-(p.gps.lat-cLat)*mLat});
+  let raggio=60;
+  punti.forEach(p=>{const q=xy(p);raggio=Math.max(raggio,Math.hypot(q.x,q.y)*1.35)});
+  const scala=Math.min(W,H)/2/raggio*0.84, cx=W/2, cy=H/2;
+
+  const passo=Math.pow(10,Math.floor(Math.log10(raggio)));
+  g.strokeStyle="#2b363d"; g.lineWidth=1;
+  g.fillStyle="#5f7078"; g.font='400 10px "JetBrains Mono",monospace'; g.textAlign="left";
+  for(let r=passo;r<=raggio;r+=passo){
+    g.beginPath(); g.arc(cx,cy,r*scala,0,Math.PI*2); g.stroke();
+    g.fillText(r>=1000?(r/1000)+" km":r+" m",cx+5,cy-r*scala-5);
+  }
+  g.setLineDash([2,6]); g.beginPath();
+  g.moveTo(0,cy); g.lineTo(W,cy); g.moveTo(cx,0); g.lineTo(cx,H); g.stroke(); g.setLineDash([]);
+
+  punti.forEach(p=>{
+    const s=stato(p), cc=col(BANDIERE[s.bandiera].c), q=xy(p);
+    const x=cx+q.x*scala, y=cy+q.y*scala;
+    g.globalAlpha=Date.now()-p.gps.t>10*60e3?.45:1;
+    g.beginPath(); g.arc(x,y,14,0,Math.PI*2); g.fillStyle=cc+"22"; g.fill();
+    g.beginPath(); g.arc(x,y,5,0,Math.PI*2); g.fillStyle=cc; g.fill();
+    g.textAlign="center";
+    g.fillStyle="#e8eef0"; g.font='600 13px "Barlow Condensed",sans-serif';
+    g.fillText(String(p.nome).toUpperCase(),x,y-19);
+    g.fillStyle="#5f7078"; g.font='400 10px "JetBrains Mono",monospace';
+    g.fillText(oraDi(p.gps.t),x,y+25);
+    g.globalAlpha=1;
+  });
+
+  const dV=Math.round(Math.hypot((cLng-VARANO.lng)*mLng,(cLat-VARANO.lat)*mLat));
+  lab.textContent=`${punti.length} in mappa · centro a ${dV>=1000?(dV/1000).toFixed(1)+" km":dV+" m"} dall'autodromo`;
+}
+
+/* ══ SFIDE A SORPRESA ══
+   Tipo, momento e domanda derivano dal timestamp: tutti i telefoni
+   generano la stessa sfida senza bisogno di un arbitro. */
+function generaSfida(quando){
+  const mie=custom||[];
+  if(mie.length&&rnd(quando/1000+31)<0.45){
+    const i=Math.floor(rnd(quando/1000+3)*mie.length), m=mie[i];
+    return {id:"s"+quando,tipo:"custom",inizio:quando,fine:quando+(m.durata||6)*60e3,cid:m.id,
+            prossima:quando+(m.durata||6)*60e3+Math.floor(rnd(quando/1000)*8+7)*60e3};
+  }
+  const k=CHIAVI_TIPI[Math.floor(rnd(quando/1000)*CHIAVI_TIPI.length)];
+  const t=TIPI[k];
+  const s={id:"s"+quando,tipo:k,inizio:quando,fine:quando+t.durata};
+  if(t.banco) s.v=Math.floor(rnd(quando/1000+7)*BANCHI[t.banco].length);
+  s.prossima=s.fine+Math.floor(rnd(s.fine/1000)*8+7)*60e3;
+  return s;
+}
+async function ciclaSfide(){
+  const ora=Date.now();
+  let s=await leggi(K_SFIDA,true);
+  if(modo==="pilota"&&sfidaMirataViva()&&!(s&&(s.inizio||0)>(sfida.inizio||0))){ disegnaSfida(); return; }
+  if(!s){ s={id:"s0",tipo:"veloce",inizio:0,fine:0,prossima:ora+5*60e3}; await scrivi(K_SFIDA,s,true); }
+  if(ora>=s.fine && ora>=s.prossima){
+    s=generaSfida(Math.floor(s.prossima/1000)*1000);
+    await scrivi(K_SFIDA,s,true);
+  }
+  sfida=s;
+  const mirataAltrui = s.dest && io && !s.dest.includes(io.id);
+  if(s.inizio && s.id!==suonata && ora<s.fine && ora-s.inizio<40e3 && !(modo==="pilota"&&mirataAltrui)){
+    suonata=s.id; suona("sfida");
+    if(navigator.vibrate) navigator.vibrate([30,70,30,70,120]);
+    svegliaRiposo();
+  }
+  if(modo==="pilota"&&io) valuta(s);
+  disegnaSfida();
+}
+async function lanciaOra(){
+  sfida=generaSfida(Math.floor(Date.now()/1000)*1000);
+  await scrivi(K_SFIDA,sfida,true);
+  suonata=sfida.id; suona("sfida"); disegnaSfida();
+}
+
+const preso=(p,id)=>(p.bonus||[]).some(b=>b.sfida===id);
+async function premia(id,punti,motivo){
+  if(preso(io,id)) return;
+  await salva({...io,bonus:[...(io.bonus||[]),{sfida:id,punti,motivo,t:Date.now()}],updated:Date.now()});
+  suona(punti>0?"ok":"no");
+  toast(motivo,(punti>0?"+":"")+punti);
+  if(tab==="box") disegnaBox();
+  disegnaSfida();
+}
+
+function valuta(s){
+  if(!s||!s.inizio||preso(io,s.id)) return;
+  if(io.nato&&io.nato>s.inizio) return;
+  const ora=Date.now(), st=stato(io);
+  const dentro=st.drinks.filter(d=>d.t>=s.inizio&&d.t<=s.fine);
+  if(s.tipo==="veloce"&&dentro.some(d=>d.k==="ok")) premia(s.id,10,"Giro veloce: pit stop doppio");
+
+}
+
+/* domanda costruita sulla griglia viva */
+function domandaGriglia(){
+  const r=classifica().filter(x=>x.s.alc>0||x.s.h2o>0);
+  if(r.length<3) return null;
+  const nomi=r.slice(0,6).map(x=>x.p.nome);
+  const giusto=r[0].p.nome;
+  const altri=nomi.filter(n=>n!==giusto).slice(0,2);
+  const o=[giusto,...altri];
+  return {d:"Chi è primo in classifica in questo momento?",o,r:0};
+}
+
+async function rispondi(i,btn,q){
+  document.querySelectorAll(".opz").forEach(b=>b.disabled=true);
+  const ok=q.o[i]===q.o[q.r];
+  btn.classList.add(ok?"giusta":"sbagliata");
+  const g=document.querySelectorAll(".opz")[q.r]; if(g) g.classList.add("giusta");
+  await premia(sfida.id, ok?25:0, ok?"Risposta esatta":"Risposta errata");
+}
+
+function scommessa(host,s){
+  const p=stato(io).punti, max=Math.max(5,Math.min(50,Math.round(p*0.4)));
+  host.innerHTML=`<div class="des">Punta fino a ${max} punti sulla prossima prova del tavolo.</div>
+    <input id="scVal" inputmode="numeric" value="${Math.min(10,max)}" style="width:100%;background:var(--asfalto);border:1px solid var(--linea);border-radius:11px;padding:12px;color:var(--testo);font-family:var(--mono);font-size:16px;margin-top:8px">
+    <button class="opz" id="scVinta">Ho vinto — raddoppio</button>
+    <button class="opz" id="scPersa">Ho perso — pago</button>`;
+  const v=()=>Math.max(0,Math.min(max,+host.querySelector("#scVal").value||0));
+  host.querySelector("#scVinta").addEventListener("click",()=>premia(s.id,v(),`Scommessa vinta (${v()})`));
+  host.querySelector("#scPersa").addEventListener("click",()=>premia(s.id,-v(),`Scommessa persa (${v()})`));
+}
+function sabotaggio(host,s){
+  const altri=classifica().map(x=>x.p).filter(p=>p.id!==io.id);
+  if(!altri.length){
+    host.innerHTML=`<div class="des">Nessun avversario collegato: niente da sabotare.</div>
+      <button class="opz" id="sbVuoto">Passo</button>`;
+    host.querySelector("#sbVuoto").addEventListener("click",()=>premia(s.id,0,"Sabotaggio saltato"));
+    return;
+  }
+  host.innerHTML=`<div class="des">Scegli chi rallentare. A te costa 5 punti, e in torre si vedrà.</div>`+
+    altri.map(p=>`<button class="opz" data-p="${p.id}">Sabota ${esc(p.nome)} — −15 a lui, −5 a te</button>`).join("")+
+    `<button class="opz" id="sbNo">Lascio perdere</button>`;
+  host.querySelectorAll(".opz[data-p]").forEach(b=>b.addEventListener("click",async()=>{
+    const v=altri.find(x=>x.id===b.dataset.p);
+    const g=(await leggi(K_GRIGLIA,true))||{};
+    if(g[v.id]){
+      g[v.id]={...g[v.id],bonus:[...(g[v.id].bonus||[]),{sfida:s.id+"-sab",punti:-15,motivo:"Sabotato da "+io.nome,t:Date.now()}],updated:Date.now()};
+      await scrivi(K_GRIGLIA,g,true);
+    }
+    await premia(s.id,-5,"Sabotaggio riuscito");
+  }));
+  host.querySelector("#sbNo").addEventListener("click",()=>premia(s.id,0,"Sabotaggio rinunciato"));
+}
+
+/* mini gioco: partenza a semaforo */
+function semaforo(host){
+  giocoAttivo=true;
+  host.innerHTML=`<div class="luci">${"<i></i>".repeat(5)}</div>
+    <button class="opz" id="rzGo" style="text-align:center">Pronto — tocca per accendere</button>
+    <div class="des" id="rzMsg">Cinque luci, poi buio. Tocca appena si spengono.</div>`;
+  const luci=[...host.querySelectorAll(".luci i")], go=host.querySelector("#rzGo"), msg=host.querySelector("#rzMsg");
+  let fase="attesa", t0=0, timers=[];
+  const pulisci=()=>timers.forEach(clearTimeout);
+  go.addEventListener("click",async()=>{
+    if(fase==="attesa"){
+      fase="accende"; go.textContent="Attento…"; msg.textContent="Non anticipare.";
+      luci.forEach((l,i)=>timers.push(setTimeout(()=>{l.classList.add("on");suona("luce")},(i+1)*900)));
+      timers.push(setTimeout(()=>{
+        fase="pronto";
+        timers.push(setTimeout(()=>{
+          luci.forEach(l=>l.classList.remove("on")); suona("via");
+          fase="via"; t0=performance.now(); go.textContent="ORA!";
+        }, 600+Math.random()*2600));
+      },5*900));
+      return;
+    }
+    if(fase==="accende"||fase==="pronto"){
+      pulisci(); fase="fine"; suona("anticipo");
+      luci.forEach(l=>l.classList.remove("on"));
+      go.textContent="Partenza anticipata"; giocoAttivo=false;
+      await premia(sfida.id,0,"Semaforo: partenza anticipata");
+      return;
+    }
+    if(fase==="via"){
+      const ms=Math.round(performance.now()-t0); fase="fine"; giocoAttivo=false;
+      const p= ms<250?25 : ms<400?18 : ms<600?10 : 5;
+      go.textContent=ms+" millesimi";
+      await premia(sfida.id,p,`Semaforo: ${ms} ms`);
+    }
+  });
+}
+
+/* una sfida mirata non deve essere spazzata via dal giro automatico */
+function sfidaMirataViva(){
+  return sfida&&sfida.tipo==="diretta"&&Date.now()<sfida.fine
+    &&(!sfida.dest||(io&&sfida.dest.includes(io.id)));
+}
+function nuovaSfidaLocale(s){
+  sfida=s; suonata=s.id;
+  suona("sfida");
+  if(navigator.vibrate) navigator.vibrate([30,70,30,70,120]);
+  svegliaRiposo(); disegnaSfida();
+}
+
+function mmss(ms){
+  const s=Math.max(0,Math.round(ms/1000));
+  return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");
+}
+function sfidaCustom(s){ return (custom||[]).find(x=>x.id===s.cid) }
+function bersaglio(s,n){
+  const r=classifica(); if(!r.length) return null;
+  return r[Math.floor(rnd(s.inizio/1000+n)*r.length)].p;
+}
+function testoSfida(s){
+  const t=TIPI[s.tipo];
+  if(s.tipo==="diretta") return s.testo||"";
+  if(s.tipo==="custom"){ const m=sfidaCustom(s); return m?m.testo:(lingua==="en"?"Challenge removed from the list.":"Sfida rimossa dal catalogo.") }
+  if(s.tipo==="duello"){ const a=bersaglio(s,1), b=bersaglio(s,2);
+    return a&&b&&a.id!==b.id ? (lingua==="en"
+      ? `${a.nome} against ${b.nome} on the lights. Loser pays whatever the table decides.`
+      : `${a.nome} contro ${b.nome} al semaforo. Chi perde paga la penalità che decide il tavolo.`) : desTipo(s.tipo); }
+  if(s.tipo==="processo"){ const a=bersaglio(s,5);
+    return a ? (lingua==="en"
+      ? `${a.nome} is summoned to race control. The table makes the charge, they get sixty seconds to answer it.`
+      : `${a.nome} è convocato in direzione gara. Il tavolo formula l'accusa, lui ha sessanta secondi per difendersi.`) : desTipo(s.tipo); }
+  if(s.tipo==="quiz") return banco("QUIZ")[s.v||0].d;
+  if(s.tipo==="prova") return banco("PROVE")[s.v||0];
+  if(s.tipo==="regime") return banco("REGIMI")[s.v||0];
+  if(s.tipo==="griglia"){ const q=domandaGriglia()||banco("QUIZ")[Math.floor(rnd(s.inizio/1000+11)*QUIZ.length)]; return q.d; }
+  return desTipo(s.tipo);
+}
+
+function disegnaSfida(){
+  const s=sfida;
+  if(modo==="muretto"){
+    const w=document.getElementById("mwSfida");
+    if(!s||!s.inizio||Date.now()>s.fine+90e3){ w.classList.remove("on"); return; }
+    const t=TIPI[s.tipo], c=col(t.c), viva=Date.now()<s.fine;
+    w.classList.add("on");
+    const tit=w.querySelector(".tit"); tit.textContent=t.nome; tit.style.color=c;
+    const fatti=Object.values(griglia).filter(p=>(p.bonus||[]).some(b=>b.sfida===s.id&&b.punti>0)).map(p=>p.nome);
+    w.querySelector(".des").innerHTML=esc(testoSfida(s))+(fatti.length?` <span style="color:${c}">· ${esc(fatti.join(", "))}</span>`:"");
+    const cd=w.querySelector(".cd");
+    cd.textContent=viva?mmss(s.fine-Date.now()):tr("chiusa");
+    cd.style.color=viva?c:"var(--testo-3)";
+    return;
+  }
+  const box=document.getElementById("sfidaBox"); if(!box||!io) return;
+  const perMe=!s||!s.dest||s.dest.includes(io.id);
+  if(!s||!s.inizio||!perMe||Date.now()>s.fine+75e3){ box.innerHTML=""; box.dataset.id=""; return; }
+  if(box.dataset.sid!==s.id){ giocoAttivo=false; box.dataset.sid=s.id; }
+  if(giocoAttivo){ aggiornaCd(box,s); return; }
+  const t=TIPI[s.tipo], c=col(t.c), viva=Date.now()<s.fine;
+  const mio=(io.bonus||[]).find(b=>b.sfida===s.id);
+  const chiave=s.id+(viva?"v":"f")+(mio?"m":"-");
+  if(box.dataset.id!==chiave){
+    box.dataset.id=chiave;
+    let dentro=`<div class="des">${esc(testoSfida(s))}</div>`;
+    let q=null;
+    if(!mio&&viva){
+      if(s.tipo==="quiz") q=banco("QUIZ")[s.v||0];
+      if(s.tipo==="griglia") q=domandaGriglia()||banco("QUIZ")[Math.floor(rnd(s.inizio/1000+11)*QUIZ.length)];
+      if(q) dentro+=q.o.map((o,i)=>`<button class="opz" data-i="${i}">${esc(o)}</button>`).join("");
+      if(s.tipo==="prova") dentro+=`<button class="opz" id="fatta">Fatta — prendo i +15</button>`;
+      if(s.tipo==="regime") dentro+=`<button class="opz" id="beccato">Mi hanno beccato — −10</button>`;
+      if(s.tipo==="diretta")
+        dentro+=`<button class="opz" id="fatta">Fatta — +${s.punti}</button>
+                 <button class="opz" id="beccato">Non l'ho fatta — ${s.malus}</button>`;
+      if(s.tipo==="custom"){ const m=sfidaCustom(s);
+        dentro+=`<button class="opz" id="fatta">Fatta — +${m?m.punti:20}</button>
+                 <button class="opz" id="beccato">Non l'ho fatta — ${m?(m.malus||0):0}</button>`; }
+      if(s.tipo==="duello"||s.tipo==="processo")
+        dentro+=`<button class="opz" id="fatta">Ho vinto / assolto — +${TIPI[s.tipo].premio}</button>
+                 <button class="opz" id="beccato">Ho perso / condannato — −10</button>`;
+      if(s.tipo==="scommessa") dentro+=`<div id="scomm"></div>`;
+      if(s.tipo==="sabotaggio") dentro+=`<div id="sabo"></div>`;
+      if(s.tipo==="reazione") dentro+=`<div id="rz"></div>`;
+    }
+    const esito=mio?`<div class="esito" style="color:${mio.punti>0?"var(--verde)":"var(--testo-3)"}">${esc(mio.motivo)} · ${mio.punti>0?"+"+mio.punti:mio.punti}</div>`
+      :(!viva?`<div class="esito" style="color:var(--testo-3)">Finestra chiusa</div>`:"");
+    box.innerHTML=`<div class="sfida" style="border-color:${c}">
+      <div class="cap"><span class="tit" style="color:${c}">${nomeTipo(s.tipo)}</span><span class="cd" style="color:${c}">--:--</span></div>
+      ${dentro}<div class="barra"><i style="background:${c};width:0"></i></div>${esito}</div>`;
+    if(q) box.querySelectorAll(".opz[data-i]").forEach(b=>b.addEventListener("click",()=>rispondi(+b.dataset.i,b,q)));
+    const m=s.tipo==="custom"?sfidaCustom(s):null;
+    const suPremio = s.tipo==="diretta"?(s.punti||0) : s.tipo==="custom"?(m?m.punti:20) : s.tipo==="prova"?15 : TIPI[s.tipo].premio||15;
+    const suMalus  = s.tipo==="diretta"?(s.malus||0) : s.tipo==="custom"?(m?(m.malus||0):0) : -10;
+    const f=box.querySelector("#fatta"); if(f) f.addEventListener("click",()=>premia(s.id,suPremio,"Prova superata"));
+    const bc=box.querySelector("#beccato"); if(bc) bc.addEventListener("click",()=>premia(s.id,suMalus,suMalus?"Penalità incassata":"Prova non superata"));
+    const sc=box.querySelector("#scomm"); if(sc) scommessa(sc,s);
+    const sb=box.querySelector("#sabo"); if(sb) sabotaggio(sb,s);
+    const rz=box.querySelector("#rz"); if(rz) semaforo(rz);
+  }
+  aggiornaCd(box,s);
+}
+function aggiornaCd(box,s){
+  const viva=Date.now()<s.fine;
+  const cd=box.querySelector(".cd"), ba=box.querySelector(".barra i");
+  if(cd){ cd.textContent=viva?mmss(s.fine-Date.now()):tr("chiusa"); if(!viva) cd.style.color="var(--testo-3)"; }
+  if(ba) ba.style.width=viva?Math.max(0,(s.fine-Date.now())/(s.fine-s.inizio)*100)+"%":"0";
+}
+
+/* ══ SCHERMO SVEGLIO E MODALITÀ TAVOLO ══ */
+let wl=null, vuoleSveglio=false, inRiposo=false;
+async function tieniSveglio(on){
+  vuoleSveglio=on;
+  try{
+    if(on){ if(!wl && "wakeLock" in navigator){ wl=await navigator.wakeLock.request("screen"); wl.addEventListener("release",()=>{wl=null}); } }
+    else if(wl){ await wl.release(); wl=null; }
+  }catch(e){ wl=null; }
+  return !!wl;
+}
+document.addEventListener("visibilitychange",async()=>{
+  if(!document.hidden){
+    if(vuoleSveglio&&!wl) tieniSveglio(true);
+    if(modo) { sincronizza(); ciclaSfide(); }
+  }
+});
+
+const rp=document.getElementById("riposo");
+async function entraRiposo(){
+  inRiposo=true; sbloccaAudio();
+  const ok=await tieniSveglio(true);
+  rp.classList.add("on"); rp.classList.remove("sveglia");
+  aggiornaRiposo();
+  const b=document.getElementById("riposoBtn");
+  if(b&&!ok) b.title="Il browser non concede il blocco schermo";
+}
+async function esciRiposo(){
+  inRiposo=false; rp.classList.remove("on","sveglia");
+  await tieniSveglio(false);
+  if(tab==="box") disegnaBox();
+}
+rp.addEventListener("click",esciRiposo);
+
+function aggiornaRiposo(){
+  if(!inRiposo||!io) return;
+  const st=stato(io), b=BANDIERE[st.bandiera];
+  const sveglio=rp.classList.contains("sveglia");
+  document.getElementById("rpBac").textContent=st.bac.toFixed(2);
+  document.getElementById("rpFl").style.background=sveglio?col(b.c):"#1e2a2f";
+  const s=sfida, viva=s&&s.inizio&&Date.now()<s.fine;
+  document.getElementById("rpSf").textContent=viva?nomeTipo(s.tipo):"";
+  document.getElementById("rpCd").textContent=viva?mmss(s.fine-Date.now()):"";
+}
+function svegliaRiposo(){
+  if(!inRiposo) return;
+  rp.classList.add("sveglia"); aggiornaRiposo();
+  setTimeout(()=>{ if(inRiposo){ rp.classList.remove("sveglia"); aggiornaRiposo(); } },25000);
+}
+
+/* ── sheet, toast ── */
+const velo=document.getElementById("velo"), sheet=document.getElementById("sheet");
+function apriSheet(html){document.getElementById("sheetCorpo").innerHTML=html;velo.classList.add("on");sheet.classList.add("on")}
+function chiudiSheet(){velo.classList.remove("on");sheet.classList.remove("on")}
+velo.addEventListener("click",chiudiSheet);
+let tT;
+function toast(testo,punti){
+  const t=document.getElementById("toast");
+  t.querySelector(".tt").textContent=testo;
+  const p=t.querySelector(".pp"); p.textContent=punti;
+  p.style.color=String(punti).startsWith("-")||String(punti).startsWith("−")?"var(--rossa)":"var(--verde)";
+  t.classList.add("on"); clearTimeout(tT); tT=setTimeout(()=>t.classList.remove("on"),2400);
+}
+function aggiornaConta(){const e=document.getElementById("nPiloti");if(e)e.textContent=Math.max(1,Object.keys(griglia).length)}
+
+/* ── avvio ── */
+(async function(){
+  const invC=(location.hash||"").match(/#cloud=(.+)$/);
+  if(invC){
+    try{
+      const d=JSON.parse(decodeURIComponent(escape(atob(invC[1]))));
+      if(d&&d.g&&d.c){ locSet(K_SESSIONE,{cloud:true,gara:d.g,cfg:d.c}); locSet("varano:cloudcfg",d.c); }
+    }catch(e){}
+  }
+  const inv=(location.hash||"").match(/#gara=([A-Za-z0-9]{3,12})$/);
+  if(inv) locSet(K_SESSIONE,{relay:true,code:inv[1].toUpperCase()});
+  const ses=locGet(K_SESSIONE);
+  if(ses&&ses.relay&&ses.code){
+    try{ await relayAvvia(ses.code) }catch(e){ diagErr="relay: "+e.message }
+  }
+  else if(ses&&ses.cloud&&ses.gara&&ses.cfg){
+    try{ await fbConnetti(ses.cfg,ses.gara) }catch(e){ diagErr="cloud: "+e.message }
+  }
+  else if(ses&&!ses.live){ locDel(K_SESSIONE); }
+  else if(ses&&ses.live&&ses.id){
+    try{ await entraLive(ses.id) }catch(e){ try{ await ospitaLive(ses.id) }catch(e2){ diagErr="live: "+e2.message } }
+  }
+  else if(typeof window.storage!=="undefined"&&window.storage) backend="anteprima";
+  else backend="locale";
+  locDel("varano:fbcfg");
+  lingua = locGet("varano:lingua") || (((navigator.language||"it").slice(0,2)==="it")?"it":"en");
+  traduciScelta();
+  pannelloConn();
+  const c=await leggi(K_CATALOGO,true);
+  if(c&&c.length) catalogo=c; else scrivi(K_CATALOGO,CATALOGO_BASE,true);
+  const m=await leggi(K_MODO,false);
+  if(m==="muretto") await entra(m);
+  else if(m==="pilota"&&locGet(K_LOCALE)) await entra(m);
+  else await cancella(K_MODO);          // scelta incompleta: si riparte dalla schermata iniziale
+  setInterval(()=>{if(modo==="muretto"&&backend!=="live")sincronizza()},1500);
+  setInterval(()=>{if(modo&&backend!=="live")sincronizza()},2000);
+  setInterval(()=>{if(modo)ciclaSfide()},8000);
+  setInterval(()=>{if(modo)disegnaSfida(); if(inRiposo)aggiornaRiposo();},1000);
+  setInterval(()=>{if(modo==="pilota"&&tab==="box"&&io)disegnaBox()},10000);
+  document.addEventListener("visibilitychange",()=>{if(!document.hidden&&modo)sincronizza()});
+})();
+</script>
